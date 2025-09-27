@@ -1458,6 +1458,8 @@ a:hover {
     background: white;
     padding: 2rem 0;
     border-bottom: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 1;
 }
 
 .news-filter {
@@ -1523,6 +1525,8 @@ a:hover {
 .news-listing {
     padding: 3rem 0;
     background: #f8fafc;
+    position: relative;
+    z-index: 1;
 }
 
 .news-listing-grid {
@@ -1542,6 +1546,8 @@ a:hover {
     border: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 2;
 }
 
 .news-item:hover {
@@ -1590,6 +1596,7 @@ a:hover {
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 500;
+    z-index: 10;
 }
 
 .news-item-content {
@@ -4667,5 +4674,262 @@ a:hover {
     
     .admin-actions-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   5 PILAR SECTION STYLES
+   ======================================== */
+
+.pilar-section {
+    background: #f8fafc;
+    padding: 80px 0;
+}
+
+.pilar-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.pilar-item {
+    position: relative;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pilar-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.pilar-image {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.pilar-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.pilar-item:hover .pilar-image img {
+    transform: scale(1.05);
+}
+
+.pilar-number {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: linear-gradient(135deg, #0098ff, #0066cc);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: 3px solid white;
+    box-shadow: 0 4px 15px rgba(0, 152, 255, 0.3);
+    z-index: 2;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .pilar-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .pilar-item:nth-child(4),
+    .pilar-item:nth-child(5) {
+        grid-column: span 1;
+    }
+    
+    .pilar-item:nth-child(4) {
+        grid-column: 1 / span 1;
+    }
+    
+    .pilar-item:nth-child(5) {
+        grid-column: 3 / span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .pilar-section {
+        padding: 60px 0;
+    }
+    
+    .pilar-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .pilar-item:nth-child(4),
+    .pilar-item:nth-child(5) {
+        grid-column: span 1;
+    }
+    
+    .pilar-image {
+        border-radius: 8px;
+    }
+    
+    .pilar-image img {
+        height: 200px;
+    }
+    
+    .pilar-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        top: -12px;
+        right: -12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pilar-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .pilar-image img {
+        height: 220px;
+    }
+}
+
+/* ========================================
+   UMKM BINAAN SECTION STYLES
+   ======================================== */
+
+.umkm-binaan-section {
+    background: white;
+    padding: 80px 0;
+}
+
+.umkm-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+.umkm-stat-card {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.umkm-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #0098ff, #0066cc);
+}
+
+.umkm-stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 152, 255, 0.15);
+    border-color: rgba(0, 152, 255, 0.2);
+}
+
+.stat-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.fashion-icon {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+}
+
+.food-icon {
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    color: white;
+}
+
+.umkm-stat-card:hover .stat-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.stat-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.stat-content p {
+    color: #718096;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #0098ff;
+    margin-bottom: 1rem;
+    line-height: 1;
+    text-shadow: 0 2px 4px rgba(0, 152, 255, 0.1);
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .umkm-binaan-section {
+        padding: 60px 0;
+    }
+    
+    .umkm-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .umkm-stat-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .stat-content h3 {
+        font-size: 1.3rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
     }
 }

@@ -92,7 +92,7 @@
             <div class="news-listing-grid">
                 @forelse($news as $item)
                     <!-- News Item -->
-                    <article class="news-item" data-category="{{ $item->category }}" onclick="window.location.href='{{ route('berita.detail', $item->slug) }}'" style="cursor: pointer;">
+                    <article class="news-item" data-category="{{ $item->category }}" data-date="{{ $item->published_at->format('Y-m-d') }}" data-views="{{ $item->views ?? 0 }}" onclick="window.location.href='{{ route('berita.detail', $item->slug) }}'" style="cursor: pointer;">
                         <div class="news-item-wrapper">
                             <div class="news-item-image">
                                 <img src="{{ $item->image_url }}" alt="{{ $item->title }}" loading="lazy">
@@ -292,34 +292,68 @@
         });
     }
 
-    // Sort functionality
+    // Sort functionality with debouncing
     const sortSelect = document.querySelector('.sort-select');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            const sortValue = this.value;
-            const newsGrid = document.querySelector('.news-listing-grid');
-            const items = Array.from(newsGrid.children);
-            
-            items.sort((a, b) => {
+    let sortTimeout = null;
+    
+    function performSort(sortValue) {
+        const newsGrid = document.querySelector('.news-listing-grid');
+        if (!newsGrid) return;
+        
+        const items = Array.from(newsGrid.children);
+        if (items.length === 0) return;
+        
+        items.sort((a, b) => {
+            try {
                 if (sortValue === 'latest') {
-                    const dateA = new Date(a.dataset.date);
-                    const dateB = new Date(b.dataset.date);
+                    const dateA = new Date(a.dataset.date || '1970-01-01');
+                    const dateB = new Date(b.dataset.date || '1970-01-01');
+                    
+                    // Check if dates are valid
+                    if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                        return 0;
+                    }
+                    
                     return dateB - dateA;
                 } else if (sortValue === 'oldest') {
-                    const dateA = new Date(a.dataset.date);
-                    const dateB = new Date(b.dataset.date);
+                    const dateA = new Date(a.dataset.date || '1970-01-01');
+                    const dateB = new Date(b.dataset.date || '1970-01-01');
+                    
+                    // Check if dates are valid
+                    if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                        return 0;
+                    }
+                    
                     return dateA - dateB;
                 } else if (sortValue === 'popular') {
-                    // Assuming we have view count in dataset
                     const viewsA = parseInt(a.dataset.views || 0);
                     const viewsB = parseInt(b.dataset.views || 0);
                     return viewsB - viewsA;
                 }
+            } catch (error) {
+                console.warn('Sorting error:', error);
                 return 0;
-            });
+            }
+            return 0;
+        });
+        
+        // Reorder items in DOM
+        items.forEach(item => newsGrid.appendChild(item));
+    }
+    
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            const sortValue = this.value;
             
-            // Reorder items in DOM
-            items.forEach(item => newsGrid.appendChild(item));
+            // Clear previous timeout
+            if (sortTimeout) {
+                clearTimeout(sortTimeout);
+            }
+            
+            // Debounce the sort operation
+            sortTimeout = setTimeout(() => {
+                performSort(sortValue);
+            }, 100);
         });
     }
 

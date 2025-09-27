@@ -72,6 +72,91 @@
         </div>
     </section>
 
+    <!-- 5 Pilar Section -->
+    <section id="pilar" class="pilar-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2>5 PILAR RUMAH BUMN</h2>
+                <p>Lima pilar utama yang menjadi fondasi kuat dalam menjalankan misi pemberdayaan UMKM di Indonesia</p>
+            </div>
+
+            <div class="pilar-grid">
+                <div class="pilar-item">
+                    <div class="pilar-image">
+                        <img src="{{ asset('images/5 pilar/fungsi1.jpg') }}" alt="Pilar 1 - Rumah BUMN">
+                    </div>
+                    <div class="pilar-number">01</div>
+                </div>
+                
+                <div class="pilar-item">
+                    <div class="pilar-image">
+                        <img src="{{ asset('images/5 pilar/fungsi2.jpg') }}" alt="Pilar 2 - Rumah BUMN">
+                    </div>
+                    <div class="pilar-number">02</div>
+                </div>
+                
+                <div class="pilar-item">
+                    <div class="pilar-image">
+                        <img src="{{ asset('images/5 pilar/fungsi3.jpg') }}" alt="Pilar 3 - Rumah BUMN">
+                    </div>
+                    <div class="pilar-number">03</div>
+                </div>
+                
+                <div class="pilar-item">
+                    <div class="pilar-image">
+                        <img src="{{ asset('images/5 pilar/fungsi4.jpg') }}" alt="Pilar 4 - Rumah BUMN">
+                    </div>
+                    <div class="pilar-number">04</div>
+                </div>
+                
+                <div class="pilar-item">
+                    <div class="pilar-image">
+                        <img src="{{ asset('images/5 pilar/fungsi5.jpg') }}" alt="Pilar 5 - Rumah BUMN">
+                    </div>
+                    <div class="pilar-number">05</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UMKM Binaan Section -->
+    <section id="umkm-binaan" class="umkm-binaan-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2>UMKM BINAAN</h2>
+                <p>Jumlah UMKM yang telah dibina dan dikembangkan oleh Rumah BUMN Telkom Pekalongan dalam berbagai kategori usaha</p>
+            </div>
+
+            <div class="umkm-stats-grid">
+                <div class="umkm-stat-card">
+                    <div class="stat-icon fashion-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L13.09 8.26L22 9L17 14L18.18 22.74L12 19.27L5.82 22.74L7 14L2 9L10.91 8.26L12 2Z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="45">0</div>
+                        <h3>UMKM Fashion</h3>
+                        <p>Usaha dibidang fashion, pakaian, aksesoris, dan produk tekstil yang telah dibina</p>
+                    </div>
+                </div>
+
+                <div class="umkm-stat-card">
+                    <div class="stat-icon food-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.1 13.34L1.94 7.18C1.54 6.78 1.54 6.14 1.94 5.74S3.04 5.34 3.44 5.74L9.54 11.84L8.1 13.34ZM14.88 11.53C14.5 11.16 13.86 11.16 13.49 11.53L11.53 13.49C11.16 13.86 11.16 14.5 11.53 14.88L12.64 16L7.88 20.76C7.48 21.16 7.48 21.8 7.88 22.2S8.98 22.6 9.38 22.2L14.14 17.44L15.25 18.55C15.62 18.92 16.26 18.92 16.63 18.55L18.59 16.59C18.96 16.22 18.96 15.58 18.59 15.21L14.88 11.53ZM22 10C22 12.21 20.21 14 18 14C15.79 14 14 12.21 14 10C14 9.45 14.09 8.92 14.26 8.42L15.61 9.77C15.75 10.17 16.03 10.5 16.41 10.68C16.79 10.86 17.23 10.86 17.61 10.68C17.99 10.5 18.27 10.17 18.41 9.77L22 6.18C22 7.45 22 8.72 22 10Z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="67">0</div>
+                        <h3>UMKM Makanan</h3>
+                        <p>Usaha dibidang kuliner, makanan, dan minuman yang telah dikembangkan bersama</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- News Section -->
     <section id="berita" class="news-section section">
         <div class="container">
@@ -171,6 +256,53 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 100); // Small delay to ensure page is fully loaded
     }
+    
+    // Counter Animation
+    function animateCounter(element, target, duration = 2000) {
+        let startValue = 0;
+        let startTime = null;
+        
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const progress = Math.min(timeElapsed / duration, 1);
+            
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const currentValue = Math.floor(easeOutQuart * target);
+            
+            element.textContent = currentValue.toLocaleString();
+            
+            if (progress < 1) {
+                requestAnimationFrame(animation);
+            } else {
+                element.textContent = target.toLocaleString();
+            }
+        }
+        
+        requestAnimationFrame(animation);
+    }
+    
+    // Intersection Observer for counter animation
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const counterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.getAttribute('data-target'));
+                animateCounter(entry.target, target);
+                counterObserver.unobserve(entry.target); // Only animate once
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all counter elements
+    document.querySelectorAll('.stat-number, .summary-number').forEach(counter => {
+        counterObserver.observe(counter);
+    });
 });
 </script>
 @endpush
