@@ -4,33 +4,6 @@
 @section('description', 'Ajukan proposal kegiatan untuk diselenggarakan di Rumah BUMN Telkom Pekalongan')
 
 @section('content')
-    <!-- Page Header -->
-    <section class="page-header-section">
-        <div class="container">
-            <div class="page-header-content">
-                <nav class="breadcrumb">
-                    <a href="{{ url('/') }}">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                        </svg>
-                        Beranda
-                    </a>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                    </svg>
-                    <a href="{{ route('booking.index') }}">Layanan</a>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                    </svg>
-                    <span>Pengajuan Proposal</span>
-                </nav>
-                
-                <h1>Pengajuan Proposal Kegiatan</h1>
-                <p>Isi form berikut untuk mengajukan proposal kegiatan di Rumah BUMN Telkom Pekalongan</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Proposal Form Section -->
     <section class="proposal-form-section section">
         <div class="container-fluid">

@@ -5,29 +5,6 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <section class="page-header-section">
-        <div class="container">
-            <div class="page-header-content">
-                <nav class="breadcrumb">
-                    <a href="{{ url('/') }}">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                        </svg>
-                        Beranda
-                    </a>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                    </svg>
-                    <span>Berita</span>
-                </nav>
-                
-                <h1>Berita Terkini</h1>
-                <p>Informasi terbaru seputar program dan kegiatan Rumah BUMN Telkom Pekalongan</p>
-            </div>
-        </div>
-    </section>
-
     <!-- News Filter -->
     <section class="news-filter-section">
         <div class="container">

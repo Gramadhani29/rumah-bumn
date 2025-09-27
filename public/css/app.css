@@ -49,13 +49,13 @@ p {
 }
 
 a {
-    color: #3182ce;
+    color: #0098ff;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #2c5aa0;
+    color: #0066cc;
     text-decoration: underline;
 }
 
@@ -85,7 +85,7 @@ a:hover {
 /* Header */
 .header {
     background: white;
-    color: #2596be;
+    color: #0098ff;
     padding: 1rem 0;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     position: fixed;
@@ -119,7 +119,7 @@ a:hover {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #2596be;
+    color: #0098ff;
     display: flex;
     align-items: center;
 }
@@ -139,7 +139,7 @@ a:hover {
 }
 
 .navbar a {
-    color: #2596be;
+    color: #0098ff;
     font-weight: 500;
     transition: all 0.3s ease;
     position: relative;
@@ -151,18 +151,18 @@ a:hover {
 }
 
 .navbar a.active {
-    border-bottom: 2px solid #2596be;
+    border-bottom: 2px solid #0098ff;
     padding-bottom: 2px;
 }
 
 .navbar .btn {
-    border: 2px solid #2596be;
+    border: 2px solid #0098ff;
     background: transparent;
-    color: #2596be;
+    color: #0098ff;
 }
 
 .navbar .btn:hover {
-    background: #2596be;
+    background: #0098ff;
     color: white;
     transform: translateY(-1px);
 }
@@ -178,7 +178,7 @@ a:hover {
 .menu-toggle span {
     width: 25px;
     height: 3px;
-    background-color: #2596be;
+    background-color: #0098ff;
     margin: 3px 0;
     transition: 0.3s;
 }
@@ -261,7 +261,7 @@ a:hover {
 
 .btn-gabung {
     display: inline-block;
-    background: #2596be;
+    background: #0098ff;
     color: white;
     padding: 15px 60px;
     border-radius: 50px;
@@ -294,8 +294,8 @@ a:hover {
 
 .btn-gabung:hover {
     background: white;
-    color: #2596be;
-    border: 2px solid #2596be;
+    color: #0098ff;
+    border: 2px solid #0098ff;
     transform: translateY(-3px);
     box-shadow: 0 12px 35px rgba(37, 150, 190, 0.4);
     text-decoration: none;
@@ -342,12 +342,12 @@ a:hover {
 }
 
 .btn-primary {
-    background-color: #3182ce;
+    background-color: #0098ff;
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #2c5aa0;
+    background-color: #0066cc;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
@@ -438,7 +438,7 @@ a:hover {
 
 .form-control:focus {
     outline: none;
-    border-color: #3182ce;
+    border-color: #0098ff;
     box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
 }
 
@@ -508,7 +508,7 @@ a:hover {
 
 .alert-info {
     background-color: #ebf8ff;
-    border-color: #3182ce;
+    border-color: #0098ff;
     color: #2a4365;
 }
 
@@ -606,7 +606,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #2596be;
+    color: #0098ff;
     flex-shrink: 0;
     transition: all 0.3s ease;
 }
@@ -759,7 +759,7 @@ a:hover {
 }
 
 .news-card-equal .news-read-more {
-    color: #2596be;
+    color: #0098ff;
     font-weight: 500;
     text-decoration: none;
     font-size: 0.875rem;
@@ -822,7 +822,7 @@ a:hover {
 }
 
 .featured-category {
-    background: #2596be;
+    background: #0098ff;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 20px;
@@ -850,7 +850,7 @@ a:hover {
 }
 
 .featured-label {
-    color: #2596be;
+    color: #0098ff;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -866,7 +866,7 @@ a:hover {
     bottom: -0.375rem;
     width: 40px;
     height: 2px;
-    background: linear-gradient(90deg, #2596be, #1e7ba0);
+    background: linear-gradient(90deg, #0098ff, #0066cc);
     border-radius: 1px;
 }
 
@@ -897,7 +897,7 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #2596be;
+    color: #0098ff;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
@@ -908,7 +908,7 @@ a:hover {
 }
 
 .featured-read-more:hover {
-    color: #1e7ba0;
+    color: #0066cc;
     gap: 0.75rem;
 }
 
@@ -945,7 +945,7 @@ a:hover {
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, #2596be, #1e7ba0);
+    background: linear-gradient(90deg, #0098ff, #0066cc);
     border-radius: 2px;
 }
 
@@ -1023,7 +1023,7 @@ a:hover {
 }
 
 .news-card-uniform .news-read-more {
-    color: #2596be;
+    color: #0098ff;
     font-weight: 500;
     text-decoration: none;
     font-size: 0.8rem;
@@ -1034,7 +1034,7 @@ a:hover {
 }
 
 .news-card-uniform .news-read-more:hover {
-    color: #1e7ba0;
+    color: #0066cc;
 }
 
 /* News Empty State for Homepage */
@@ -1131,7 +1131,7 @@ a:hover {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    background: #2596be;
+    background: #0098ff;
     color: white;
     padding: 0.4rem 0.8rem;
     border-radius: 20px;
@@ -1202,7 +1202,7 @@ a:hover {
 
 /* Read More Link */
 .news-read-more {
-    color: #2596be;
+    color: #0098ff;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
@@ -1213,7 +1213,7 @@ a:hover {
 }
 
 .news-read-more:hover {
-    color: #1e7ba0;
+    color: #0066cc;
 }
 
 /* View All News Button */
@@ -1225,8 +1225,8 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    background: #2596be;
-    color: white;
+    background: #0098ff;
+    color: white !important;
     padding: 1rem 2rem;
     border-radius: 50px;
     text-decoration: none;
@@ -1235,13 +1235,18 @@ a:hover {
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(37, 150, 190, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 152, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    opacity: 1;
 }
 
 .btn-view-all:hover {
-    background: #1e7ba0;
+    background: #0066cc;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(37, 150, 190, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 102, 204, 0.5);
+    color: white;
+    opacity: 1;
 }
 
 .btn-view-all svg {
@@ -1384,7 +1389,7 @@ a:hover {
 
 /* Page Header */
 .page-header {
-    background: linear-gradient(135deg, #2596be 0%, #1e7ba0 100%);
+    background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
     color: white;
     padding: 120px 0 80px;
     position: relative;
@@ -1482,8 +1487,8 @@ a:hover {
 
 .filter-tab:hover,
 .filter-tab.active {
-    background: #2596be;
-    border-color: #2596be;
+    background: #0098ff;
+    border-color: #0098ff;
     color: white;
 }
 
@@ -1503,7 +1508,7 @@ a:hover {
 }
 
 .search-input:focus {
-    border-color: #2596be;
+    border-color: #0098ff;
 }
 
 .filter-search svg {
@@ -1565,7 +1570,7 @@ a:hover {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    background: #2596be;
+    background: #0098ff;
     color: white;
     padding: 0.4rem 0.8rem;
     border-radius: 20px;
@@ -1620,7 +1625,7 @@ a:hover {
 }
 
 .news-item-link {
-    color: #2596be;
+    color: #0098ff;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
@@ -1631,7 +1636,7 @@ a:hover {
 }
 
 .news-item-link:hover {
-    color: #1e7ba0;
+    color: #0066cc;
 }
 
 /* Pagination */
@@ -1659,8 +1664,8 @@ a:hover {
 }
 
 .pagination-btn:hover:not(:disabled) {
-    background: #2596be;
-    border-color: #2596be;
+    background: #0098ff;
+    border-color: #0098ff;
     color: white;
 }
 
@@ -1692,8 +1697,8 @@ a:hover {
 
 .pagination-number:hover,
 .pagination-number.active {
-    background: #2596be;
-    border-color: #2596be;
+    background: #0098ff;
+    border-color: #0098ff;
     color: white;
 }
 
@@ -2117,7 +2122,7 @@ a:hover {
 /* Loading Animation */
 .spinner {
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #3182ce;
+    border-top: 3px solid #0098ff;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -2132,7 +2137,7 @@ a:hover {
 
 /* Custom BUMN Theme Colors */
 .bumn-primary {
-    background: #2596be;
+    background: #0098ff;
     color: white;
 }
 
@@ -2142,7 +2147,7 @@ a:hover {
 }
 
 .text-bumn-primary {
-    color: #2596be;
+    color: #0098ff;
 }
 
 .text-bumn-secondary {
@@ -2224,7 +2229,7 @@ a:hover {
 }
 
 .social-link:hover {
-    background: #2596be;
+    background: #0098ff;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(37, 150, 190, 0.3);
 }
@@ -2256,7 +2261,7 @@ a:hover {
 }
 
 .footer-links a:hover {
-    color: #2596be;
+    color: #0098ff;
 }
 
 .footer-contact .contact-item {
@@ -2325,7 +2330,7 @@ a:hover {
 /* Auth Body & Container */
 .auth-body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #2596be 0%, #1e3c72 100%);
+    background: linear-gradient(135deg, #0098ff 0%, #1e3c72 100%);
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -2408,7 +2413,7 @@ a:hover {
 
 .auth-form-input:focus {
     outline: none;
-    border-color: #2596be;
+    border-color: #0098ff;
     background: white;
     box-shadow: 0 0 0 3px rgba(37, 150, 190, 0.1);
 }
@@ -2421,7 +2426,7 @@ a:hover {
 /* Auth Button */
 .auth-btn-primary {
     width: 100%;
-    background: #2596be;
+    background: #0098ff;
     color: white;
     border: none;
     padding: 0.875rem 1.5rem;
@@ -2435,7 +2440,7 @@ a:hover {
 }
 
 .auth-btn-primary:hover {
-    background: #1e7ba0;
+    background: #0066cc;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(37, 150, 190, 0.3);
 }
@@ -2514,7 +2519,7 @@ a:hover {
 }
 
 .content-text blockquote {
-    border-left: 4px solid #2596be;
+    border-left: 4px solid #0098ff;
     background: #f8fafc;
     padding: 1.5rem 2rem;
     margin: 2rem 0;
@@ -2636,7 +2641,7 @@ a:hover {
     color: #1f2937;
     margin: 0 0 1.5rem 0;
     padding: 1.5rem 1.5rem 0.75rem 1.5rem;
-    border-bottom: 2px solid #2596be;
+    border-bottom: 2px solid #0098ff;
     position: relative;
     background: #f8fafc;
 }
@@ -2648,7 +2653,7 @@ a:hover {
     left: 1.5rem;
     width: 60px;
     height: 2px;
-    background: #2596be;
+    background: #0098ff;
 }
 
 /* Related News */
@@ -2694,7 +2699,7 @@ a:hover {
 .related-news-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: #2596be;
+    border-color: #0098ff;
 }
 
 .related-news-image {
@@ -2757,7 +2762,7 @@ a:hover {
 }
 
 .related-news-content h4 a:hover {
-    color: #2596be;
+    color: #0098ff;
 }
 
 .related-news-meta {
@@ -2791,17 +2796,17 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    color: #2596be;
+    color: #0098ff;
     text-decoration: none;
     font-weight: 600;
     padding: 0.875rem 1.5rem;
-    border: 2px solid #2596be;
+    border: 2px solid #0098ff;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .btn-back-to-news:hover {
-    background: #2596be;
+    background: #0098ff;
     color: white;
     transform: translateX(-4px);
 }
@@ -3400,7 +3405,7 @@ a:hover {
 
 /* Auth Links */
 .auth-link {
-    color: #2596be;
+    color: #0098ff;
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
@@ -3408,7 +3413,7 @@ a:hover {
 }
 
 .auth-link:hover {
-    color: #1e7ba0;
+    color: #0066cc;
     text-decoration: underline;
 }
 
@@ -3423,7 +3428,7 @@ a:hover {
 .auth-checkbox {
     width: 18px;
     height: 18px;
-    accent-color: #2596be;
+    accent-color: #0098ff;
 }
 
 .auth-checkbox-label {
@@ -3577,7 +3582,7 @@ a:hover {
 .admin-title h1 {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #2596be;
+    color: #0098ff;
     margin: 0;
 }
 
@@ -3616,7 +3621,7 @@ a:hover {
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     background: #f1f5f9;
-    color: #2596be;
+    color: #0098ff;
     text-decoration: none;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -3626,7 +3631,7 @@ a:hover {
 
 .admin-btn-secondary:hover {
     background: #e2e8f0;
-    color: #1e7ba0;
+    color: #0066cc;
 }
 
 .admin-btn-logout {
@@ -3685,7 +3690,7 @@ a:hover {
 }
 
 .admin-stat-icon.users {
-    background: linear-gradient(135deg, #2596be, #1e7ba0);
+    background: linear-gradient(135deg, #0098ff, #0066cc);
 }
 
 .admin-stat-icon.content {
@@ -3779,7 +3784,7 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #2596be;
+    background: #0098ff;
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
@@ -3791,7 +3796,7 @@ a:hover {
 }
 
 .admin-btn-primary:hover {
-    background: #1e7ba0;
+    background: #0066cc;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(37, 150, 190, 0.3);
 }
@@ -3847,7 +3852,7 @@ a:hover {
 
 .admin-input-search:focus {
     outline: none;
-    border-color: #2596be;
+    border-color: #0098ff;
     box-shadow: 0 0 0 3px rgba(37, 150, 190, 0.1);
 }
 
@@ -3863,12 +3868,12 @@ a:hover {
 
 .admin-select:focus {
     outline: none;
-    border-color: #2596be;
+    border-color: #0098ff;
     box-shadow: 0 0 0 3px rgba(37, 150, 190, 0.1);
 }
 
 .admin-btn-filter {
-    background: #2596be;
+    background: #0098ff;
     color: white;
     border: none;
     padding: 0.75rem 1rem;
@@ -3879,7 +3884,7 @@ a:hover {
 }
 
 .admin-btn-filter:hover {
-    background: #1e7ba0;
+    background: #0066cc;
 }
 
 .admin-btn-reset {
@@ -4207,7 +4212,7 @@ a:hover {
 
 .admin-input:focus {
     outline: none;
-    border-color: #2596be;
+    border-color: #0098ff;
     box-shadow: 0 0 0 3px rgba(37, 150, 190, 0.1);
 }
 
@@ -4224,7 +4229,7 @@ a:hover {
 
 .admin-textarea:focus {
     outline: none;
-    border-color: #2596be;
+    border-color: #0098ff;
     box-shadow: 0 0 0 3px rgba(37, 150, 190, 0.1);
 }
 
@@ -4253,7 +4258,7 @@ a:hover {
 }
 
 .admin-file-upload-area:hover {
-    border-color: #2596be;
+    border-color: #0098ff;
     background: #f8fafc;
 }
 
@@ -4311,7 +4316,7 @@ a:hover {
 
 .admin-checkbox {
     margin-top: 0.25rem;
-    accent-color: #2596be;
+    accent-color: #0098ff;
 }
 
 .admin-checkbox-label {
@@ -4550,13 +4555,13 @@ a:hover {
 .admin-action-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #2596be;
+    border-color: #0098ff;
 }
 
 .admin-action-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #2596be, #1e7ba0);
+    background: linear-gradient(135deg, #0098ff, #0066cc);
     border-radius: 10px;
     display: flex;
     align-items: center;

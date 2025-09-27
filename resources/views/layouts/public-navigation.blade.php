@@ -18,10 +18,21 @@
                 <li><a href="{{ url('/#about') }}">Tentang Kami</a></li>
                 <li><a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*') ? 'active' : '' }}">Berita</a></li>
                 <li><a href="#toko">Toko</a></li>
-                <li><a href="{{ route('booking.index') }}" class="{{ request()->routeIs('booking*') ? 'active' : '' }}">Booking</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle {{ request()->routeIs('booking*') || request()->routeIs('proposal*') ? 'active' : '' }}" onclick="toggleDropdown(event, 'layananDropdown')">
+                        Layanan
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 5px;">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </a>
+                    <ul class="dropdown-menu" id="layananDropdown">
+                        <li><a href="{{ route('booking.index') }}">Booking Ruangan</a></li>
+                        <li><a href="{{ route('proposal.create') }}">Pengajuan Proposal</a></li>
+                    </ul>
+                </li>
                 @auth
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+                    <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event, 'userDropdown')">
                         {{ Auth::user()->name }}
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 5px;">
                             <path d="M7 10l5 5 5-5z"/>
@@ -76,6 +87,12 @@
     z-index: 1000;
     padding: 8px 0;
     margin-top: 5px;
+}
+
+/* Specific positioning for layanan dropdown */
+#layananDropdown {
+    right: auto;
+    left: 0;
 }
 
 .dropdown-menu.show {
@@ -153,21 +170,50 @@
 </style>
 
 <script>
-function toggleDropdown(event) {
+function toggleDropdown(event, dropdownId = 'userDropdown') {
     event.preventDefault();
     event.stopPropagation();
     
-    const dropdown = document.getElementById('userDropdown');
-    dropdown.classList.toggle('show');
+    // Close all other dropdowns first
+    const allDropdowns = document.querySelectorAll('.dropdown-menu');
+    allDropdowns.forEach(dropdown => {
+        if (dropdown.id !== dropdownId) {
+            dropdown.classList.remove('show');
+        }
+    });
+    
+    // Toggle the target dropdown
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
 }
 
 // Close dropdown when clicking outside
 document.addEventListener('click', function(event) {
-    const dropdown = document.getElementById('userDropdown');
-    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const allDropdowns = document.querySelectorAll('.dropdown-menu');
+    const allDropdownToggles = document.querySelectorAll('.dropdown-toggle');
     
-    if (dropdown && !dropdown.contains(event.target) && !dropdownToggle.contains(event.target)) {
-        dropdown.classList.remove('show');
+    let clickedInsideDropdown = false;
+    
+    // Check if click was inside any dropdown or toggle
+    allDropdowns.forEach(dropdown => {
+        if (dropdown.contains(event.target)) {
+            clickedInsideDropdown = true;
+        }
+    });
+    
+    allDropdownToggles.forEach(toggle => {
+        if (toggle.contains(event.target)) {
+            clickedInsideDropdown = true;
+        }
+    });
+    
+    // If click was outside all dropdowns, close them all
+    if (!clickedInsideDropdown) {
+        allDropdowns.forEach(dropdown => {
+            dropdown.classList.remove('show');
+        });
     }
 });
 

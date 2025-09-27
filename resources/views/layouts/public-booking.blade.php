@@ -25,14 +25,14 @@
     }
 
     .info-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
         color: white;
         padding: 25px;
         border-radius: 15px;
         display: flex;
         align-items: center;
         gap: 15px;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 152, 255, 0.3);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -42,7 +42,7 @@
 
     .info-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 40px rgba(0, 152, 255, 0.4);
     }
 
     .info-icon {
@@ -176,7 +176,7 @@
     }
 
     .detail-item svg {
-        color: #3498db;
+        color: #0098ff;
     }
 
     .room-facilities h4 {
@@ -203,7 +203,7 @@
     }
 
     .facility-more {
-        background: #3498db;
+        background: #0098ff;
         color: white;
         padding: 4px 10px;
         border-radius: 15px;
@@ -218,7 +218,7 @@
 
     .btn-book {
         flex: 1;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
         color: white;
         text-decoration: none;
         padding: 12px 20px;
@@ -235,7 +235,7 @@
 
     .btn-book:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 152, 255, 0.4);
         text-decoration: none;
         color: white;
     }
@@ -371,7 +371,7 @@
     }
 
     .booking-form-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
         color: white;
         padding: 30px;
         text-align: center;
@@ -417,8 +417,8 @@
 
     .form-control:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #0098ff;
+        box-shadow: 0 0 0 3px rgba(0, 152, 255, 0.1);
     }
 
     .form-control.error {
@@ -442,7 +442,7 @@
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
         color: white;
         border: none;
         padding: 15px 30px;
@@ -456,7 +456,7 @@
 
     .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 152, 255, 0.4);
     }
 
     .btn-primary:active {

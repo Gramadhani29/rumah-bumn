@@ -319,7 +319,7 @@
     position: relative;
     height: 400px;
     overflow: hidden;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
 }
 
 .room-image-container {
@@ -342,7 +342,7 @@
     width: 100%;
     height: 100%;
     color: #fff;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
 }
 
 .breadcrumb-overlay {
@@ -365,7 +365,7 @@
 }
 
 .breadcrumb-overlay .breadcrumb a {
-    color: #667eea;
+    color: #0098ff;
     text-decoration: none;
     font-weight: 500;
     display: flex;
@@ -418,7 +418,7 @@
 }
 
 .form-header-icon {
-    color: #667eea;
+    color: #0098ff;
     margin-bottom: 1rem;
 }
 
@@ -446,7 +446,7 @@
     background: #f8f9fa;
     border-radius: 12px;
     padding: 1.5rem;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #0098ff;
 }
 
 .form-section h3 {
@@ -539,7 +539,7 @@
 
 .form-control:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #0098ff;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -576,7 +576,7 @@ textarea.form-control {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0098ff 0%, #0066cc 100%);
     color: white;
 }
 
