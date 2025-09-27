@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ProposalController;
 use App\Models\News;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -15,8 +16,9 @@ Route::get('/', function () {
         return redirect()->route('dashboard');
     }
     
-        // Ambil berita published untuk homepage
+    // Gunakan query yang sama dengan halaman berita untuk konsistensi
     $featuredNews = News::published()
+        ->with('author')
         ->featured()
         ->latest('published_at')
         ->first();
@@ -26,6 +28,7 @@ Route::get('/', function () {
     $takeCount = $featuredNews ? 4 : 5;
     
     $regularNews = News::published()
+        ->with('author')
         ->where('is_featured', false)
         ->latest('published_at')
         ->take($takeCount)
@@ -102,6 +105,12 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('bookings/{booking}/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::patch('bookings/{booking}/reject', [BookingController::class, 'reject'])->name('bookings.reject');
     Route::get('bookings/{booking}/download-pdf', [BookingController::class, 'downloadPdf'])->name('bookings.download-pdf');
+    
+    // Admin Proposal Management Routes
+    Route::get('proposals', [ProposalController::class, 'adminIndex'])->name('proposals.index');
+    Route::get('proposals/{proposal}', [ProposalController::class, 'adminShow'])->name('proposals.show');
+    Route::patch('proposals/{proposal}/approve', [ProposalController::class, 'approve'])->name('proposals.approve');
+    Route::patch('proposals/{proposal}/reject', [ProposalController::class, 'reject'])->name('proposals.reject');
 });
 
 // Public Booking Routes
@@ -117,6 +126,20 @@ Route::prefix('booking')->name('booking.')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('my-bookings', [BookingController::class, 'myBookings'])->name('my-bookings');
         Route::patch('{booking}/cancel', [BookingController::class, 'cancel'])->name('cancel');
+    });
+});
+
+// Public Proposal Routes
+Route::prefix('proposal')->name('proposal.')->group(function () {
+    Route::get('create', [ProposalController::class, 'create'])->name('create');
+    Route::post('/', [ProposalController::class, 'store'])->name('store');
+    Route::get('{proposalCode}', [ProposalController::class, 'show'])->name('show');
+    Route::get('{proposal}/download-file', [ProposalController::class, 'downloadFile'])->name('download-file');
+    
+    // Auth required routes
+    Route::middleware('auth')->group(function () {
+        Route::get('my-proposals', [ProposalController::class, 'myProposals'])->name('my-proposals');
+        Route::patch('{proposal}/cancel', [ProposalController::class, 'cancel'])->name('cancel');
     });
 });
 

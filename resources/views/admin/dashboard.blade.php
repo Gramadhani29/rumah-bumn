@@ -105,6 +105,21 @@
                 </div>
 
                 <div class="admin-stat-card">
+                    <div class="admin-stat-icon proposals">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19V1h-2v1H7V1H5v1H4.5C3.11 2 2.02 3.09 2.02 4.5L2 19.5C2 20.91 3.11 22 4.5 22h15c1.39 0 2.5-1.09 2.5-2.5v-15C22 3.09 20.89 2 19.5 2zM19.5 19.5h-15V8h15v11.5z"/>
+                        </svg>
+                    </div>
+                    <div class="admin-stat-content">
+                        <h3>Total Proposal</h3>
+                        <p class="admin-stat-number">{{ $stats['total_proposals'] ?? 0 }}</p>
+                        <span class="admin-stat-change neutral">
+                            {{ $stats['pending_proposals'] ?? 0 }} menunggu review
+                        </span>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
                     <div class="admin-stat-icon rooms">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
@@ -146,6 +161,16 @@
                         </div>
                         <h3>Kelola Booking</h3>
                         <p>Lihat dan konfirmasi reservasi</p>
+                    </a>
+
+                    <a href="{{ route('admin.proposals.index') }}" class="admin-action-card">
+                        <div class="admin-action-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            </svg>
+                        </div>
+                        <h3>Kelola Proposal</h3>
+                        <p>Review proposal kegiatan yang masuk</p>
                     </a>
 
                     <a href="{{ route('admin.rooms.index') }}" class="admin-action-card">

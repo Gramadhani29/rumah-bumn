@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\Booking;
 use App\Models\Room;
+use App\Models\Proposal;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,12 @@ class DashboardController extends Controller
             ->orderBy('bookings_count', 'desc')
             ->first();
         
+        // Statistik proposal
+        $totalProposals = Proposal::count();
+        $pendingProposals = Proposal::where('status', 'pending')->count();
+        $approvedProposals = Proposal::where('status', 'approved')->count();
+        $rejectedProposals = Proposal::where('status', 'rejected')->count();
+        
         $stats = [
             'total_visitors' => $totalVisitors,
             'visitors_change_percent' => $visitorsChangePercent,
@@ -67,6 +74,10 @@ class DashboardController extends Controller
             'cancelled_bookings' => $cancelledBookings,
             'bookings_change_percent' => $bookingsChangePercent,
             'popular_room' => $popularRoom,
+            'total_proposals' => $totalProposals,
+            'pending_proposals' => $pendingProposals,
+            'approved_proposals' => $approvedProposals,
+            'rejected_proposals' => $rejectedProposals,
         ];
 
         return view('admin.dashboard', compact('stats'));

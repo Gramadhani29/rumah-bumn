@@ -1,33 +1,39 @@
 @extends('layouts.public-booking')
 
-@section('title', 'Booking Ruangan - Rumah BUMN Telkom Pekalongan')
-@section('description', 'Booking ruangan untuk kegiatan dan acara di Rumah BUMN Telkom Pekalongan')
+@section('title', 'Layanan - Rumah BUMN Telkom Pekalongan')
+@section('description', 'Layanan untuk kegiatan dan acara di Rumah BUMN Telkom Pekalongan')
 @section('content')
-    <!-- Page Header -->
-    <section class="page-header-section">
+    <!-- Service Selection -->
+    <section class="service-selection-section section">
         <div class="container">
-            <div class="page-header-content">
-                <nav class="breadcrumb">
-                    <a href="{{ url('/') }}">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            <div class="service-selection-cards">
+                <div class="service-card active" id="booking-card" onclick="showService('booking')">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
                         </svg>
-                        Beranda
-                    </a>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                    </svg>
-                    <span>Booking Ruangan</span>
-                </nav>
-                
-                <h1>Booking Ruangan</h1>
-                <p>Pilih ruangan yang sesuai dengan kebutuhan acara Anda</p>
+                    </div>
+                    <div class="service-content">
+                        <h3>Booking Ruangan</h3>
+                    </div>
+                </div>
+
+                <div class="service-card" id="proposal-card" onclick="showService('proposal')">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                    </div>
+                    <div class="service-content">
+                        <h3>Pengajuan Proposal</h3>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Rooms Section -->
-    <section class="rooms-section section">
+    <!-- Booking Section -->
+    <section class="booking-section section" id="booking-content">
         <div class="container">
             <!-- Quick Info -->
             <div class="booking-info-cards">
@@ -52,7 +58,7 @@
                     </div>
                     <div class="info-content">
                         <h3>Gratis</h3>
-                        <p>Booking ruangan tidak dipungut biaya apapun</p>
+                        <p>Layanan tidak dipungut biaya apapun</p>
                     </div>
                 </div>
                 
@@ -160,8 +166,107 @@
         </div>
     </section>
 
-    <!-- Jadwal Booking Hari Ini -->
-    <section class="schedule-section section" style="background: #f8f9fa;">
+    <!-- Proposal Section -->
+    <section class="proposal-section section" id="proposal-content" style="display: none;">
+        <div class="container">
+            <div class="proposal-intro">
+                <div class="intro-card">
+                    <div class="intro-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                    </div>
+                    <div class="intro-content">
+                        <h3>Pengajuan Proposal Kegiatan</h3>
+                        <p>Ajukan proposal untuk kegiatan yang akan diselenggarakan di Rumah BUMN Telkom Pekalongan. Tim kami akan mengevaluasi dan memberikan feedback terkait proposal Anda.</p>
+                        
+                        <div class="kategori-info">
+                            <h4>Kategori Kegiatan yang Tersedia:</h4>
+                            <div class="kategori-grid">
+                                <div class="kategori-item">
+                                    <div class="kategori-icon">🎓</div>
+                                    <div class="kategori-content">
+                                        <h5>Pelatihan</h5>
+                                        <p>Workshop, seminar, pelatihan keterampilan, dan program capacity building</p>
+                                    </div>
+                                </div>
+                                <div class="kategori-item">
+                                    <div class="kategori-icon">🤝</div>
+                                    <div class="kategori-content">
+                                        <h5>Kerja Sama</h5>
+                                        <p>Program kemitraan, kolaborasi bisnis, dan inisiatif bersama</p>
+                                    </div>
+                                </div>
+                                <div class="kategori-item">
+                                    <div class="kategori-icon">🎪</div>
+                                    <div class="kategori-content">
+                                        <h5>Event</h5>
+                                        <p>Pameran, launching produk, gathering, dan acara komunitas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="{{ route('proposal.create') }}" class="btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                </svg>
+                                Ajukan Proposal Baru
+                            </a>
+                            
+                            @auth
+                            <a href="{{ route('proposal.my-proposals') }}" class="btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-3 7V3.5L16.5 9H11z"/>
+                                </svg>
+                                Lihat Proposal Saya
+                            </a>
+                            @endauth
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requirements -->
+            <div class="requirements-info">
+                <h4>Persyaratan Proposal:</h4>
+                <div class="requirements-grid">
+                    <div class="requirement-item">
+                        <div class="requirement-icon">📝</div>
+                        <div class="requirement-content">
+                            <h5>Deskripsi Lengkap</h5>
+                            <p>Jelaskan tujuan, target peserta, dan manfaat kegiatan</p>
+                        </div>
+                    </div>
+                    <div class="requirement-item">
+                        <div class="requirement-icon">📅</div>
+                        <div class="requirement-content">
+                            <h5>Jadwal Kegiatan</h5>
+                            <p>Tentukan tanggal dan durasi kegiatan dengan jelas</p>
+                        </div>
+                    </div>
+                    <div class="requirement-item">
+                        <div class="requirement-icon">👥</div>
+                        <div class="requirement-content">
+                            <h5>Estimasi Peserta</h5>
+                            <p>Berikan perkiraan jumlah peserta yang akan hadir</p>
+                        </div>
+                    </div>
+                    <div class="requirement-item">
+                        <div class="requirement-icon">📞</div>
+                        <div class="requirement-content">
+                            <h5>Kontak PIC</h5>
+                            <p>Sertakan informasi kontak person in charge yang dapat dihubungi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jadwal Booking Hari Ini - Only show for booking tab -->
+    <section class="schedule-section section" id="booking-schedule" style="background: #f8f9fa;">
         <div class="container">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <h2 style="color: #2c3e50; margin-bottom: 0.5rem;">📅 Jadwal Booking Hari Ini</h2>
@@ -257,9 +362,267 @@
     </div>
 @endsection
 
+@push('styles')
+<style>
+/* Service Selection Cards */
+.service-selection-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 3rem 0;
+}
+
+.service-selection-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.service-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 120px;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.service-card.active {
+    border-color: #667eea;
+    background: white;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+}
+
+.service-icon {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.service-content h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+}
+
+/* Proposal Section Styles */
+.proposal-section {
+    background: #f8f9fa;
+}
+
+.intro-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.intro-icon {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #667eea;
+}
+
+.intro-content h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.kategori-info {
+    margin: 2rem 0;
+}
+
+.kategori-info h4 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.kategori-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.kategori-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+}
+
+.kategori-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.kategori-content h5 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.kategori-content p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Requirements */
+.requirements-info {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.requirements-info h4 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.requirements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.requirement-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.requirement-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.requirement-content h5 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.requirement-content p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .service-selection-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .service-card {
+        padding: 1.5rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+</style>
+@endpush
+
 @push('scripts')
 <script>
     const roomsData = @json($rooms);
+    
+    // Service selection functionality
+    function showService(serviceType) {
+        // Update card states
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.classList.remove('active');
+        });
+        document.getElementById(serviceType + '-card').classList.add('active');
+        
+        // Show/hide content sections
+        if (serviceType === 'booking') {
+            document.getElementById('booking-content').style.display = 'block';
+            document.getElementById('proposal-content').style.display = 'none';
+            document.getElementById('booking-schedule').style.display = 'block';
+        } else {
+            document.getElementById('booking-content').style.display = 'none';
+            document.getElementById('proposal-content').style.display = 'block';
+            document.getElementById('booking-schedule').style.display = 'none';
+        }
+    }
     
     function showRoomDetails(roomId) {
         const room = roomsData.find(r => r.id === roomId);

@@ -19,7 +19,7 @@ class BookingController extends Controller
     {
         $rooms = Room::available()->orderBy('name')->get();
         
-        return view('booking.index', compact('rooms'));
+        return view('layanan.booking.index', compact('rooms'));
     }
 
     /**
@@ -34,7 +34,7 @@ class BookingController extends Controller
         $today = Carbon::today()->format('Y-m-d');
         $maxDate = Carbon::today()->addMonths(3)->format('Y-m-d');
         
-        return view('booking.create', compact('room', 'today', 'maxDate'));
+        return view('layanan.booking.create', compact('room', 'today', 'maxDate'));
     }
 
     /**
@@ -146,7 +146,7 @@ class BookingController extends Controller
     {
         $booking = Booking::with('room', 'user')->findOrFail($bookingId);
         
-        return view('booking.show', compact('booking'));
+        return view('layanan.booking.show', compact('booking'));
     }
 
     /**
@@ -159,7 +159,7 @@ class BookingController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('booking.my-bookings', compact('bookings'));
+        return view('layanan.booking.my-bookings', compact('bookings'));
     }
 
     /**
@@ -211,7 +211,7 @@ class BookingController extends Controller
         
         $bookings = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.bookings.index', compact('bookings'));
+        return view('admin.layanan.bookings.index', compact('bookings'));
     }
 
     /**
@@ -252,7 +252,7 @@ class BookingController extends Controller
     {
         $booking->load('room');
         
-        $pdf = Pdf::loadView('pdf.booking-confirmation', compact('booking'))
+        $pdf = Pdf::loadView('layanan.booking.pdf', compact('booking'))
             ->setPaper('a4', 'portrait')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
@@ -275,7 +275,7 @@ class BookingController extends Controller
         try {
             $booking->load('room');
             
-            $pdf = Pdf::loadView('pdf.booking-confirmation', compact('booking'))
+            $pdf = Pdf::loadView('layanan.booking.pdf', compact('booking'))
                 ->setPaper('a4', 'portrait')
                 ->setOptions([
                     'isHtml5ParserEnabled' => true,
