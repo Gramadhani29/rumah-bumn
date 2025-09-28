@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\AdminMarketplaceController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProposalController;
 use App\Models\News;
@@ -111,6 +112,26 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('proposals/{proposal}', [ProposalController::class, 'adminShow'])->name('proposals.show');
     Route::patch('proposals/{proposal}/approve', [ProposalController::class, 'approve'])->name('proposals.approve');
     Route::patch('proposals/{proposal}/reject', [ProposalController::class, 'reject'])->name('proposals.reject');
+    
+    // Admin Marketplace Management Routes
+    Route::prefix('marketplace')->name('marketplace.')->group(function () {
+        // Dashboard marketplace
+        Route::get('/', [AdminMarketplaceController::class, 'index'])->name('index');
+        
+        // Kelola Pesanan
+        Route::get('orders', [AdminMarketplaceController::class, 'orders'])->name('orders');
+        Route::get('orders/{id}', [AdminMarketplaceController::class, 'orderShow'])->name('orders.show');
+        Route::patch('orders/{id}/status', [AdminMarketplaceController::class, 'updateOrderStatus'])->name('orders.status');
+        
+        // Kelola Produk
+        Route::get('products', [AdminMarketplaceController::class, 'products'])->name('products');
+        Route::get('products/create', [AdminMarketplaceController::class, 'productCreate'])->name('products.create');
+        Route::post('products', [AdminMarketplaceController::class, 'productStore'])->name('products.store');
+        Route::get('products/{id}/edit', [AdminMarketplaceController::class, 'productEdit'])->name('products.edit');
+        Route::patch('products/{id}', [AdminMarketplaceController::class, 'productUpdate'])->name('products.update');
+        Route::delete('products/{id}', [AdminMarketplaceController::class, 'productDestroy'])->name('products.destroy');
+        Route::patch('products/{id}/toggle', [AdminMarketplaceController::class, 'toggleProductStatus'])->name('products.toggle');
+    });
 });
 
 // Public Booking Routes
@@ -147,6 +168,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Routes untuk Toko
+Route::prefix('toko')->name('toko.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\TokoController::class, 'index'])->name('index');
+    Route::get('/produk/{id}', [\App\Http\Controllers\TokoController::class, 'show'])->name('produk.show');
+    Route::get('/keranjang', [\App\Http\Controllers\TokoController::class, 'cart'])->name('cart');
+    Route::post('/keranjang/tambah', [\App\Http\Controllers\TokoController::class, 'addToCart'])->name('cart.add');
+    Route::post('/keranjang/update', [\App\Http\Controllers\TokoController::class, 'updateCartQuantity'])->name('cart.update');
+    Route::delete('/keranjang/{id}', [\App\Http\Controllers\TokoController::class, 'removeFromCart'])->name('cart.remove');
+    Route::post('/keranjang/clear', [\App\Http\Controllers\TokoController::class, 'clearCart'])->name('cart.clear');
+    Route::get('/checkout', [\App\Http\Controllers\TokoController::class, 'checkout'])->name('checkout');
+});
+
+// Payment Routes
+Route::prefix('payment')->name('payment.')->group(function () {
+    Route::post('/create-transaction', [\App\Http\Controllers\PaymentController::class, 'createTransaction'])->name('create');
+    Route::get('/finish', [\App\Http\Controllers\PaymentController::class, 'paymentFinish'])->name('finish');
+    Route::get('/unfinish', [\App\Http\Controllers\PaymentController::class, 'paymentUnfinish'])->name('unfinish');
+    Route::get('/error', [\App\Http\Controllers\PaymentController::class, 'paymentError'])->name('error');
+    Route::post('/notification', [\App\Http\Controllers\PaymentController::class, 'handleNotification'])->name('notification');
 });
 
 require __DIR__.'/auth.php';

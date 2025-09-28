@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'midtrans' => [
+        'merchant_id' => env('MIDTRANS_MERCHANT_ID'),
+        'client_key' => env('MIDTRANS_CLIENT_KEY'),
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'environment' => env('MIDTRANS_ENVIRONMENT', 'sandbox'), // sandbox or production
+        'sanitized' => true,
+        'enable_3ds' => true,
+    ],
+
 ];

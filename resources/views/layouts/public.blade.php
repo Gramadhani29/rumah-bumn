@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Rumah BUMN Telkom Pekalongan')</title>
     <meta name="description" content="@yield('description', 'Rumah BUMN adalah inisiatif Kementerian BUMN yang menjadi wadah kolaborasi dan pemberdayaan UMKM di seluruh Indonesia.')">
     

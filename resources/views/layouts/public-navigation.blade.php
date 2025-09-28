@@ -17,7 +17,7 @@
                 <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Beranda</a></li>
                 <li><a href="{{ url('/#about') }}">Tentang Kami</a></li>
                 <li><a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*') ? 'active' : '' }}">Berita</a></li>
-                <li><a href="#toko">Toko</a></li>
+                <li><a href="{{ route('toko.index') }}" class="{{ request()->routeIs('toko*') ? 'active' : '' }}">Toko</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle {{ request()->routeIs('booking*') || request()->routeIs('proposal*') ? 'active' : '' }}" onclick="toggleDropdown(event, 'layananDropdown')">
                         Layanan

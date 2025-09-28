@@ -183,14 +183,14 @@
                         <p>Tambah dan edit ruangan</p>
                     </a>
 
-                    <a href="#" class="admin-action-card">
+                    <a href="{{ route('admin.marketplace.index') }}" class="admin-action-card">
                         <div class="admin-action-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
                             </svg>
                         </div>
-                        <h3>Marketplace</h3>
-                        <p>Kelola produk UMKM marketplace</p>
+                        <h3>Kelola Marketplace</h3>
+                        <p>Kelola produk dan pesanan UMKM</p>
                     </a>
 
                     <a href="#" class="admin-action-card">
