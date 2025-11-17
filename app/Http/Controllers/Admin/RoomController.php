@@ -12,13 +12,57 @@ use Illuminate\Support\Facades\Storage;
 class RoomController extends Controller
 {
     /**
-     * Display a listing of rooms
+     * Display a listing of rooms with booking overview
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $rooms = Room::withCount('bookings')->orderBy('name')->paginate(10);
+        $view = $request->get('view', 'rooms'); // rooms or bookings
         
-        return view('admin.rooms.index', compact('rooms'));
+        // Count only active/upcoming bookings
+        $rooms = Room::withCount(['bookings' => function($query) {
+            $query->where('booking_date', '>=', now()->toDateString())
+                  ->whereIn('status', ['pending', 'confirmed']);
+        }])->orderBy('name')->paginate(10);
+        
+        // Get booking statistics
+        $bookingStats = [
+            'total' => \App\Models\Booking::count(),
+            'pending' => \App\Models\Booking::where('status', 'pending')->count(),
+            'confirmed' => \App\Models\Booking::where('status', 'confirmed')->count(),
+            'cancelled' => \App\Models\Booking::where('status', 'cancelled')->count(),
+        ];
+        
+        // Get recent bookings for bookings view
+        $bookings = null;
+        if ($view === 'bookings') {
+            $query = \App\Models\Booking::with(['room', 'user']);
+            
+            // Apply filters
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
+            
+            if ($request->filled('room_id')) {
+                $query->where('room_id', $request->room_id);
+            }
+            
+            if ($request->filled('date')) {
+                $query->whereDate('booking_date', $request->date);
+            }
+            
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function($q) use ($search) {
+                    $q->where('booking_code', 'like', "%{$search}%")
+                      ->orWhere('contact_name', 'like', "%{$search}%")
+                      ->orWhere('contact_phone', 'like', "%{$search}%");
+                });
+            }
+            
+            $bookings = $query->orderBy('created_at', 'desc')->paginate(15);
+        }
+        
+        return view('admin.layanan.bookings.index', compact('rooms', 'bookingStats', 'bookings', 'view'));
     }
 
     /**
@@ -26,7 +70,7 @@ class RoomController extends Controller
      */
     public function create(): View
     {
-        return view('admin.rooms.create');
+        return view('admin.layanan.bookings.create');
     }
 
     /**
@@ -74,13 +118,16 @@ class RoomController extends Controller
      */
     public function show(Room $room): View
     {
+        // Only load upcoming bookings that are pending or confirmed
         $room->load(['bookings' => function($query) {
-            $query->where('booking_date', '>=', today())
+            $query->with('user')
+                  ->where('booking_date', '>=', today())
+                  ->whereIn('status', ['pending', 'confirmed'])
                   ->orderBy('booking_date')
                   ->orderBy('time_from');
         }]);
         
-        return view('admin.rooms.show', compact('room'));
+        return view('admin.layanan.bookings.show', compact('room'));
     }
 
     /**
@@ -88,7 +135,7 @@ class RoomController extends Controller
      */
     public function edit(Room $room): View
     {
-        return view('admin.rooms.edit', compact('room'));
+        return view('admin.layanan.bookings.edit', compact('room'));
     }
 
     /**

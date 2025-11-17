@@ -8,36 +8,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="dashboard-body">
-    <!-- Admin Header -->
-    <header class="admin-header">
-        <div class="admin-container">
-            <div class="admin-header-left">
-                <img src="{{ asset('images/Logo RBP.png') }}" alt="Logo RBP" class="admin-logo">
-                <div class="admin-title">
-                    <h1>EDIT BERITA</h1>
-                    <p>Rumah BUMN Telkom Pekalongan</p>
-                </div>
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar">
+        <div class="admin-navbar-container">
+            <div class="admin-navbar-left">
+                <a href="{{ route('dashboard') }}" class="admin-navbar-brand">
+                    <img src="{{ asset('images/Logo RBP.png') }}" alt="Logo Rumah BUMN" class="admin-navbar-logo">
+                </a>
             </div>
             
-            <div class="admin-header-right">
-                <div class="admin-user-info">
-                    <span class="admin-welcome">Selamat datang, {{ Auth::user()->name }}</span>
-                    <div class="admin-actions">
-                        <a href="{{ route('admin.news.index') }}" class="admin-btn-back">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <div class="admin-navbar-right">
+                <form method="POST" action="{{ route('logout') }}" class="admin-navbar-logout-form">
+                    @csrf
+                    <button type="submit" class="admin-navbar-logout-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                        </svg>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main class="admin-main">
+        <div class="admin-container">
+            <div class="admin-page-header">
+                <div class="admin-page-title">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <a href="{{ route('admin.news.index') }}" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f3f4f6; border-radius: 8px; transition: all 0.2s; text-decoration: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #374151;">
                                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                             </svg>
-                            Kembali
                         </a>
-                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="admin-btn-logout">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
-                                </svg>
-                                Logout
-                            </button>
-                        </form>
+                        <div>
+                            <h1>EDIT BERITA</h1>
+                            <p>Rumah BUMN Telkom Pekalongan</p>
+                        </div>
                     </div>
                 </div>
             </div>

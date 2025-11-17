@@ -19,9 +19,6 @@
                 <a href="{{ route('toko.index') }}" class="btn btn-primary">
                     Lanjut Belanja
                 </a>
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary">
-                    Kembali ke Dashboard
-                </a>
             </div>
         </div>
     </div>
@@ -95,16 +92,6 @@
 
 .btn-primary:hover {
     background: #0066cc;
-}
-
-.btn-secondary {
-    background: #f1f5f9;
-    color: #64748b;
-    border: 2px solid #e2e8f0;
-}
-
-.btn-secondary:hover {
-    background: #e2e8f0;
 }
 </style>
 @endsection

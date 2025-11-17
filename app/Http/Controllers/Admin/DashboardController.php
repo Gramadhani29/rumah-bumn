@@ -36,16 +36,36 @@ class DashboardController extends Controller
         $lastMonthVisitors = $this->getLastMonthVisitors();
         $visitorsChangePercent = $lastMonthVisitors > 0 ? (($totalVisitors - $lastMonthVisitors) / $lastMonthVisitors) * 100 : 0;
         
-        // Statistik booking
-        $totalBookings = Booking::count();
-        $pendingBookings = Booking::where('bookings.status', 'pending')->count();
-        $confirmedBookings = Booking::where('bookings.status', 'confirmed')->count();
-        $cancelledBookings = Booking::where('bookings.status', 'cancelled')->count();
+        // Statistik booking - hanya hitung booking yang relevan (upcoming dan pending/confirmed)
+        $totalBookings = Booking::where(function($query) {
+                $query->where('booking_date', '>=', Carbon::today())
+                      ->whereIn('status', ['pending', 'confirmed']);
+            })
+            ->orWhere(function($query) {
+                $query->where('booking_date', '<', Carbon::today())
+                      ->where('status', 'confirmed');
+            })
+            ->count();
+            
+        $pendingBookings = Booking::where('bookings.status', 'pending')
+            ->where('booking_date', '>=', Carbon::today())
+            ->count();
+            
+        $confirmedBookings = Booking::where('bookings.status', 'confirmed')
+            ->where('booking_date', '>=', Carbon::today())
+            ->count();
+            
+        $cancelledBookings = Booking::where('bookings.status', 'cancelled')
+            ->where('booking_date', '>=', Carbon::today())
+            ->count();
         
-        // Booking bulan ini vs bulan lalu
-        $thisMonthBookings = Booking::where('created_at', '>=', Carbon::now()->startOfMonth())->count();
+        // Booking bulan ini vs bulan lalu (hanya yang aktif)
+        $thisMonthBookings = Booking::where('created_at', '>=', Carbon::now()->startOfMonth())
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->count();
         $lastMonthBookingsCount = Booking::where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth())
             ->where('created_at', '<', Carbon::now()->startOfMonth())
+            ->whereIn('status', ['pending', 'confirmed'])
             ->count();
         $bookingsChangePercent = $lastMonthBookingsCount > 0 ? (($thisMonthBookings - $lastMonthBookingsCount) / $lastMonthBookingsCount) * 100 : 0;
         

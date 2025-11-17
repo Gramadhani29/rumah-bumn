@@ -16,11 +16,8 @@
             <p>{{ $message }}</p>
             
             <div class="status-actions">
-                <a href="{{ route('toko.checkout') }}" class="btn btn-primary">
-                    Coba Lagi
-                </a>
-                <a href="{{ route('toko.index') }}" class="btn btn-secondary">
-                    Kembali ke Toko
+                <a href="{{ route('toko.index') }}" class="btn btn-primary">
+                    Lanjut Belanja
                 </a>
             </div>
         </div>

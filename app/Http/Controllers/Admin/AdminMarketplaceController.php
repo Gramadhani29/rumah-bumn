@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Umkm;
 use App\Models\Booking;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -16,11 +17,9 @@ class AdminMarketplaceController extends Controller
     public function index()
     {
         $totalProducts = Product::count();
-        $totalOrders = Booking::count();
+        $totalOrders = Order::count();
         $totalUmkms = Umkm::count();
-        $recentOrders = Booking::with(['user', 'room'])
-            ->whereHas('user')
-            ->latest()
+        $recentOrders = Order::latest()
             ->take(5)
             ->get();
         
@@ -42,9 +41,8 @@ class AdminMarketplaceController extends Controller
     // Kelola Pesanan
     public function orders(Request $request)
     {
-        $query = Booking::with(['user', 'room'])
-            ->whereHas('user');
-        
+        $query = Order::query();
+            
         // Filter berdasarkan status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -61,12 +59,10 @@ class AdminMarketplaceController extends Controller
         
         // Search
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->whereHas('user', function($userQuery) use ($search) {
-                    $userQuery->where('name', 'like', "%{$search}%")
-                             ->orWhere('email', 'like', "%{$search}%");
-                })->orWhere('event_name', 'like', "%{$search}%");
+            $query->where(function ($q) use ($request) {
+                $q->where('customer_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('customer_email', 'like', '%' . $request->search . '%')
+                  ->orWhere('order_id', 'like', '%' . $request->search . '%');
             });
         }
         
@@ -78,7 +74,7 @@ class AdminMarketplaceController extends Controller
     // Detail pesanan
     public function orderShow($id)
     {
-        $order = Booking::with(['user', 'room'])->findOrFail($id);
+        $order = Order::findOrFail($id);
         return view('admin.marketplace.order-detail', compact('order'));
     }
     
@@ -86,11 +82,20 @@ class AdminMarketplaceController extends Controller
     public function updateOrderStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,confirmed,completed,cancelled'
+            'status' => 'required|in:pending,paid,processing,shipped,delivered,cancelled'
         ]);
         
-        $order = Booking::findOrFail($id);
-        $order->update(['status' => $request->status]);
+        $order = Order::findOrFail($id);
+        $updateData = ['status' => $request->status];
+        
+        // Update timestamps based on status
+        if ($request->status === 'shipped' && !$order->shipped_at) {
+            $updateData['shipped_at'] = now();
+        } elseif ($request->status === 'delivered' && !$order->delivered_at) {
+            $updateData['delivered_at'] = now();
+        }
+        
+        $order->update($updateData);
         
         return redirect()->back()->with('success', 'Status pesanan berhasil diupdate!');
     }

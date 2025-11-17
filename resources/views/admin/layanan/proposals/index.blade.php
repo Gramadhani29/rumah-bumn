@@ -4,20 +4,24 @@
 @section('description', 'Panel admin untuk mengelola proposal kegiatan')
 
 @section('content')
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="mb-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800">Kelola Proposal Kegiatan</h1>
-                    <p class="text-gray-600 mt-1">Kelola semua proposal kegiatan yang masuk</p>
+    <div class="admin-main">
+        <div class="admin-container">
+            <!-- Header -->
+            <div class="admin-page-header">
+                <div class="admin-page-title">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f3f4f6; border-radius: 8px; transition: all 0.2s; text-decoration: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #374151;">
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                            </svg>
+                        </a>
+                        <div>
+                            <h1>KELOLA PROPOSAL KEGIATAN</h1>
+                            <p>Kelola semua proposal kegiatan yang masuk</p>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ route('dashboard') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Dashboard
-                </a>
             </div>
-        </div>
 
         <!-- Stats Summary -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -170,19 +174,9 @@
                                     @endswitch
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <a href="{{ route('admin.proposals.show', $proposal) }}" class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        @if($proposal->status === 'pending')
-                                            <button type="button" onclick="showApproveModal('{{ $proposal->id }}')" class="text-green-600 hover:text-green-900" title="Setujui">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" onclick="showRejectModal('{{ $proposal->id }}')" class="text-red-600 hover:text-red-900" title="Tolak">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        @endif
-                                    </div>
+                                    <a href="{{ route('admin.proposals.show', $proposal) }}" class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @empty
@@ -203,10 +197,9 @@
                 </div>
             @endif
         </div>
-    </div>
 
-    <!-- Approve Modal -->
-    <div id="approveModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <!-- Approve Modal -->
+        <div id="approveModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
                 <h3 class="text-lg font-medium text-gray-900">Setujui Proposal</h3>
@@ -282,4 +275,5 @@
             }
         }
     </script>
+    </div>
 @endsection

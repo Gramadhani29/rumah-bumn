@@ -98,9 +98,23 @@
 
             <!-- Booking Details -->
             <div style="background: white; border-radius: 15px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
-                <h3 style="margin: 0 0 2rem 0; color: #2c3e50; display: flex; align-items: center; gap: 0.5rem;">
-                    📋 Detail Booking
-                </h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3 style="margin: 0; color: #2c3e50; display: flex; align-items: center; gap: 0.5rem;">
+                        📋 Detail Booking
+                    </h3>
+                    <a href="{{ route('booking.download-pdf', $booking) }}" 
+                       class="booking-action-btn btn-download" 
+                       target="_blank" 
+                       style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1.75rem; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; background: linear-gradient(135deg, #1e88e5 0%, #1976d2 100%); color: white; box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="12" y1="18" x2="12" y2="12"/>
+                            <line x1="9" y1="15" x2="15" y2="15"/>
+                        </svg>
+                        Download Bukti PDF
+                    </a>
+                </div>
 
                 <!-- Room Info -->
                 <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
@@ -305,13 +319,17 @@
             </div>
 
             <!-- Actions -->
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <a href="{{ route('booking.download-pdf', $booking) }}" class="btn-primary" target="_blank" style="text-decoration: none;">
-                    📄 Download Bukti PDF
-                </a>
-                
-                <a href="{{ route('booking.index') }}" class="btn-secondary" style="text-decoration: none;">
-                    📅 Booking Ruangan Lagi
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; padding: 1.5rem 0;">
+                <a href="{{ route('booking.index') }}" 
+                   class="booking-action-btn btn-book-again" 
+                   style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.75rem; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; background: white; color: #1976d2; border: 2px solid #1976d2; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Booking Ruangan Lagi
                 </a>
 
                 @if($booking->canBeCancelled())
@@ -320,12 +338,55 @@
                           style="margin: 0;">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" style="background: #ef4444; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                            ❌ Batalkan Booking
+                        <button type="submit" 
+                                class="booking-action-btn btn-cancel" 
+                                style="display: inline-flex; align-items: center; gap: 0.75rem; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; background: white; color: #ef4444; border: 2px solid #ef4444; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            Batalkan Booking
                         </button>
                     </form>
                 @endif
             </div>
+
+            <style>
+                .booking-action-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+                }
+                
+                .btn-download:hover {
+                    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
+                }
+                
+                .btn-book-again:hover {
+                    background: #1976d2 !important;
+                    color: white !important;
+                }
+                
+                .btn-book-again:hover svg {
+                    stroke: white;
+                }
+                
+                .btn-cancel:hover {
+                    background: #ef4444 !important;
+                    color: white !important;
+                }
+                
+                .btn-cancel:hover svg {
+                    stroke: white;
+                }
+                
+                @media (max-width: 640px) {
+                    .booking-action-btn {
+                        width: 100%;
+                        justify-content: center;
+                    }
+                }
+            </style>
 
             <!-- Help Section -->
             <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 12px; margin-top: 2rem; text-align: center;">

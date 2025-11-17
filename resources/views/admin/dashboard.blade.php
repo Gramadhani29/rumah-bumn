@@ -1,45 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Rumah BUMN Telkom Pekalongan</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body class="dashboard-body">
-    <!-- Admin Header -->
-    <header class="admin-header">
-        <div class="admin-container">
-            <div class="admin-header-left">
-                <img src="{{ asset('images/Logo RBP.png') }}" alt="Logo RBP" class="admin-logo">
-                <div class="admin-title">
-                    <h1>DASHBOARD ADMIN</h1>
-                    <p>Rumah BUMN Telkom Pekalongan</p>
-                </div>
-            </div>
-            
-            <div class="admin-header-right">
-                <div class="admin-user-info">
-                    <span class="admin-welcome">Selamat datang, {{ Auth::user()->name }}</span>
-                    <div class="admin-actions">
-                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="admin-btn-logout">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
-                                </svg>
-                                Logout
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+@extends('layouts.admin')
 
+@section('title', 'Dashboard Admin')
+
+@section('content')
     <!-- Dashboard Content -->
-    <main class="admin-main">
+    <div class="admin-main">
         <div class="admin-container">
             <!-- Stats Cards -->
             <div class="admin-stats-grid">
@@ -61,7 +26,7 @@
                 <div class="admin-stat-card">
                     <div class="admin-stat-icon content">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h8c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M19.186 2.09c.521.25 1.136.612 1.625 1.101.49.49.852 1.104 1.1 1.625.313.654.11 1.408-.401 1.92l-7.214 7.213c-.31.31-.688.541-1.105.675l-4.222 1.353a.75.75 0 0 1-.943-.944l1.353-4.221a2.75 2.75 0 0 1 .674-1.105l7.214-7.214c.512-.512 1.266-.714 1.92-.402zm.211 2.516a3.608 3.608 0 0 0-.828-.586l-6.994 6.994a1.002 1.002 0 0 0-.178.241L9.9 14.102l2.846-1.496c.09-.047.171-.107.242-.178l6.994-6.994a3.61 3.61 0 0 0-.586-.828zM4.999 5.5A.5.5 0 0 1 5.47 5l5.53.005a1 1 0 0 0 0-2L5.5 3A2.5 2.5 0 0 0 3 5.5v12.577c0 .76.082 1.185.319 1.627.224.419.558.754.977.978.442.236.866.318 1.627.318h12.154c.76 0 1.185-.082 1.627-.318.42-.224.754-.559.978-.978.236-.442.318-.866.318-1.627V13a1 1 0 1 0-2 0v5.077c0 .459-.021.571-.082.684a.364.364 0 0 1-.157.157c-.113.06-.225.082-.684.082H5.923c-.459 0-.57-.022-.684-.082a.363.363 0 0 1-.157-.157c-.06-.113-.082-.225-.082-.684V5.5z"/>
                         </svg>
                     </div>
                     <div class="admin-stat-content">
@@ -86,6 +51,9 @@
                         <span class="admin-stat-change {{ $stats['bookings_change_percent'] >= 0 ? 'positive' : 'negative' }}">
                             {{ $stats['bookings_change_percent'] >= 0 ? '+' : '' }}{{ number_format($stats['bookings_change_percent'], 1) }}% dari bulan lalu
                         </span>
+                        <small style="display: block; margin-top: 0.5rem; color: #9ca3af; font-size: 0.75rem;">
+                            Hanya menampilkan booking aktif
+                        </small>
                     </div>
                 </div>
 
@@ -146,21 +114,11 @@
                     <a href="{{ route('admin.news.index') }}" class="admin-action-card">
                         <div class="admin-action-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h8c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.186 2.09c.521.25 1.136.612 1.625 1.101.49.49.852 1.104 1.1 1.625.313.654.11 1.408-.401 1.92l-7.214 7.213c-.31.31-.688.541-1.105.675l-4.222 1.353a.75.75 0 0 1-.943-.944l1.353-4.221a2.75 2.75 0 0 1 .674-1.105l7.214-7.214c.512-.512 1.266-.714 1.92-.402zm.211 2.516a3.608 3.608 0 0 0-.828-.586l-6.994 6.994a1.002 1.002 0 0 0-.178.241L9.9 14.102l2.846-1.496c.09-.047.171-.107.242-.178l6.994-6.994a3.61 3.61 0 0 0-.586-.828zM4.999 5.5A.5.5 0 0 1 5.47 5l5.53.005a1 1 0 0 0 0-2L5.5 3A2.5 2.5 0 0 0 3 5.5v12.577c0 .76.082 1.185.319 1.627.224.419.558.754.977.978.442.236.866.318 1.627.318h12.154c.76 0 1.185-.082 1.627-.318.42-.224.754-.559.978-.978.236-.442.318-.866.318-1.627V13a1 1 0 1 0-2 0v5.077c0 .459-.021.571-.082.684a.364.364 0 0 1-.157.157c-.113.06-.225.082-.684.082H5.923c-.459 0-.57-.022-.684-.082a.363.363 0 0 1-.157-.157c-.06-.113-.082-.225-.082-.684V5.5z"/>
                             </svg>
                         </div>
                         <h3>Kelola Berita</h3>
                         <p>Buat dan kelola artikel berita</p>
-                    </a>
-
-                    <a href="{{ route('admin.bookings.index') }}" class="admin-action-card">
-                        <div class="admin-action-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
-                            </svg>
-                        </div>
-                        <h3>Kelola Booking</h3>
-                        <p>Lihat dan konfirmasi reservasi</p>
                     </a>
 
                     <a href="{{ route('admin.proposals.index') }}" class="admin-action-card">
@@ -247,6 +205,5 @@
                 </div>
             </div>
         </div>
-    </main>
-</body>
-</html>
+    </div>
+@endsection

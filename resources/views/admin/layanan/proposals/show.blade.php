@@ -4,20 +4,24 @@
 @section('description', 'Detail lengkap proposal kegiatan')
 
 @section('content')
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="mb-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800">Detail Proposal</h1>
-                    <p class="text-gray-600 mt-1">Review lengkap proposal kegiatan</p>
+    <div class="admin-main">
+        <div class="admin-container">
+            <!-- Header -->
+            <div class="admin-page-header">
+                <div class="admin-page-title">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <a href="{{ route('admin.proposals.index') }}" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f3f4f6; border-radius: 8px; transition: all 0.2s; text-decoration: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #374151;">
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                            </svg>
+                        </a>
+                        <div>
+                            <h1>DETAIL PROPOSAL</h1>
+                            <p>Review lengkap proposal kegiatan</p>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ route('admin.proposals.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Daftar
-                </a>
             </div>
-        </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Main Content -->

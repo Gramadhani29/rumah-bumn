@@ -1,182 +1,203 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Booking - Admin Rumah BUMN')
-@section('description', 'Panel admin untuk mengelola booking ruangan')
+@section('title', 'Kelola Ruangan')
 
 @section('content')
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="mb-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800">Kelola Booking Ruangan</h1>
-                    <p class="text-gray-600 mt-1">Kelola semua booking ruangan yang masuk</p>
+    <!-- Page Header -->
+    <div class="admin-main">
+        <div class="admin-container">
+            <div class="admin-page-header">
+                <div class="admin-page-title">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f3f4f6; border-radius: 8px; transition: all 0.2s; text-decoration: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #374151;">
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                            </svg>
+                        </a>
+                        <div>
+                            <h1>KELOLA RUANGAN</h1>
+                            <p>Manajemen ruangan Rumah BUMN</p>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ route('dashboard') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Dashboard
-                </a>
             </div>
-        </div>
 
-        <!-- Stats Summary -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6 text-center">
-                <div class="text-3xl font-bold text-blue-600">{{ $bookings->total() }}</div>
-                <div class="text-gray-600 mt-1">Total Booking</div>
+            <!-- Search Bar -->
+            <div class="admin-filter-bar">
+                <form method="GET" action="{{ route('admin.rooms.index') }}" class="admin-filter-form">
+                    <div class="admin-filter-group" style="flex: 1;">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari ruangan..." class="admin-input-search">
+                    </div>
+                    
+                    <button type="submit" class="admin-btn-filter">Cari</button>
+                    @if(request('search'))
+                        <a href="{{ route('admin.rooms.index') }}" class="admin-btn-reset">Reset</a>
+                    @endif
+                </form>
             </div>
-            <div class="bg-white rounded-lg shadow-md p-6 text-center">
-                <div class="text-3xl font-bold text-yellow-600">{{ $bookings->where('status', 'pending')->count() }}</div>
-                <div class="text-gray-600 mt-1">Menunggu</div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6 text-center">
-                <div class="text-3xl font-bold text-green-600">{{ $bookings->where('status', 'confirmed')->count() }}</div>
-                <div class="text-gray-600 mt-1">Dikonfirmasi</div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6 text-center">
-                <div class="text-3xl font-bold text-red-600">{{ $bookings->where('status', 'rejected')->count() }}</div>
-                <div class="text-gray-600 mt-1">Ditolak</div>
-            </div>
-        </div>
 
-        <!-- Filters -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Semua Status</option>
-                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
-                        <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Dikonfirmasi</option>
-                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
-                    </select>
+            <!-- Success Message -->
+            @if(session('success'))
+                <div class="admin-alert admin-alert-success">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    {{ session('success') }}
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
-                    <input type="date" name="date" value="{{ request('date') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari booking..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div class="flex items-end">
-                    <button type="submit" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition duration-200">
-                        <i class="fas fa-search mr-2"></i>Filter
-                    </button>
-                </div>
-            </form>
-        </div>
+            @endif
 
-        <!-- Bookings Table -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <!-- Rooms Table -->
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ruangan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemohon</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            <th>Gambar</th>
+                            <th>Nama Ruangan</th>
+                            <th>Lokasi</th>
+                            <th>Kapasitas</th>
+                            <th>Jam Operasional</th>
+                            <th>Status</th>
+                            <th>Total Booking</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($bookings as $booking)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div>
-                                        <div class="text-sm font-medium text-gray-900">#{{ $booking->booking_code }}</div>
-                                        <div class="text-sm text-gray-500">{{ $booking->created_at->format('d M Y H:i') }}</div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">{{ $booking->room->name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $booking->room->location }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">
-                                        {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}
-                                    </div>
-                                    <div class="text-sm text-gray-500">
-                                        {{ \Carbon\Carbon::parse($booking->time_from)->format('H:i') }} - 
-                                        {{ \Carbon\Carbon::parse($booking->time_until)->format('H:i') }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">{{ $booking->contact_name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $booking->contact_phone }}</div>
-                                    @if($booking->organization)
-                                        <div class="text-sm text-gray-500">{{ $booking->organization }}</div>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    @switch($booking->status)
-                                        @case('pending')
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                Menunggu
-                                            </span>
-                                            @break
-                                        @case('confirmed')
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                                Dikonfirmasi
-                                            </span>
-                                            @break
-                                        @case('rejected')
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                                                Ditolak
-                                            </span>
-                                            @break
-                                        @case('cancelled')
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                                                Dibatalkan
-                                            </span>
-                                            @break
-                                    @endswitch
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        @if($booking->status === 'pending')
-                                            <form method="POST" action="{{ route('admin.bookings.confirm', $booking) }}" class="inline">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="text-green-600 hover:text-green-900" title="Konfirmasi">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                            </form>
-                                            <form method="POST" action="{{ route('admin.bookings.reject', $booking) }}" class="inline">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="text-red-600 hover:text-red-900" title="Tolak">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </form>
+                    <tbody>
+                        @forelse($rooms as $room)
+                            <tr>
+                                <td>
+                                    <div class="admin-table-image">
+                                        @if($room->image)
+                                            <img src="{{ Storage::url($room->image) }}" alt="{{ $room->name }}">
+                                        @else
+                                            <div class="admin-table-image-placeholder">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                                                </svg>
+                                            </div>
                                         @endif
-                                        @if($booking->status === 'confirmed')
-                                            <a href="{{ route('admin.bookings.download-pdf', $booking) }}" class="text-blue-600 hover:text-blue-900" title="Download PDF">
-                                                <i class="fas fa-download"></i>
-                                            </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="admin-table-title">
+                                        <h4>{{ $room->name }}</h4>
+                                        <p>{{ Str::limit($room->description, 60) }}</p>
+                                    </div>
+                                </td>
+                                <td>{{ $room->location ?? '-' }}</td>
+                                <td>
+                                    <span class="admin-badge admin-badge-info">
+                                        {{ $room->capacity }} Orang
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="admin-table-date">
+                                        <div>{{ \Carbon\Carbon::parse($room->available_from)->format('H:i') }}</div>
+                                        <small>s/d {{ \Carbon\Carbon::parse($room->available_until)->format('H:i') }}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="admin-badge admin-badge-{{ $room->status }} admin-toggle-status" 
+                                            data-id="{{ $room->id }}">
+                                        @if($room->status === 'available')
+                                            Tersedia
+                                        @elseif($room->status === 'maintenance')
+                                            Maintenance
+                                        @else
+                                            Tidak Tersedia
                                         @endif
+                                    </button>
+                                </td>
+                                <td>
+                                    <span class="admin-badge admin-badge-primary">
+                                        {{ $room->bookings_count ?? 0 }} Booking
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="admin-table-actions">
+                                        <a href="{{ route('admin.rooms.show', $room) }}" class="admin-btn-action admin-btn-view" title="Lihat">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ route('admin.rooms.edit', $room) }}" class="admin-btn-action admin-btn-edit" title="Edit">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                            </svg>
+                                        </a>
+                                        <form method="POST" action="{{ route('admin.rooms.destroy', $room) }}" style="display: inline;" 
+                                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus ruangan ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="admin-btn-action admin-btn-delete" title="Hapus">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                                </svg>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                                    Tidak ada booking ditemukan
+                                <td colspan="8" class="admin-table-empty">
+                                    <div class="admin-empty-state">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                                        </svg>
+                                        <h3>Belum ada ruangan</h3>
+                                        <p>Mulai tambahkan ruangan pertama Anda</p>
+                                        <a href="{{ route('admin.rooms.create') }}" class="admin-btn-primary">Tambah Ruangan</a>
+                                    </div>
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-            
+
             <!-- Pagination -->
-            @if($bookings->hasPages())
-                <div class="px-6 py-4 border-t border-gray-200">
-                    {{ $bookings->appends(request()->query())->links() }}
+            @if($rooms->hasPages())
+                <div class="admin-pagination">
+                    {{ $rooms->links() }}
                 </div>
             @endif
+        </div>
+    </main>
+
+    <script>
+        // Toggle Status
+        document.querySelectorAll('.admin-toggle-status').forEach(button => {
+            button.addEventListener('click', function() {
+                const roomId = this.dataset.id;
+                const currentStatus = this.textContent.trim();
+                
+                let newStatus;
+                if (currentStatus === 'Tersedia') {
+                    newStatus = 'maintenance';
+                } else if (currentStatus === 'Maintenance') {
+                    newStatus = 'unavailable';
+                } else {
+                    newStatus = 'available';
+                }
+                
+                fetch(`/admin/rooms/${roomId}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
         </div>
     </div>
 @endsection

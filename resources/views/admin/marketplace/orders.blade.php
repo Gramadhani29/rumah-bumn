@@ -3,29 +3,24 @@
 @section('title', 'Kelola Pesanan')
 
 @section('content')
-<div class="orders-management">
-    <!-- Header -->
-    <div class="page-header">
-        <div class="header-content">
-            <div class="header-left">
-                <h1 class="page-title">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="title-icon">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
-                    </svg>
-                    Kelola Pesanan
-                </h1>
-                <p class="page-subtitle">Kelola semua pesanan dari marketplace UMKM</p>
-            </div>
-            <div class="header-right">
-                <a href="{{ route('admin.marketplace.index') }}" class="btn-secondary">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                    </svg>
-                    Kembali ke Dashboard
-                </a>
+<div class="admin-main">
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-page-header">
+            <div class="admin-page-title">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <a href="{{ route('admin.marketplace.index') }}" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f3f4f6; border-radius: 8px; transition: all 0.2s; text-decoration: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #374151;">
+                            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                        </svg>
+                    </a>
+                    <div>
+                        <h1>KELOLA PESANAN</h1>
+                        <p>Kelola semua pesanan dari marketplace UMKM</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
     <!-- Filters -->
     <div class="filters-section">
@@ -80,7 +75,8 @@
                     <div class="table-header">
                         <div class="table-row">
                             <div class="table-cell">Customer</div>
-                            <div class="table-cell">Event</div>
+                            <div class="table-cell">Order ID</div>
+                            <div class="table-cell">Total</div>
                             <div class="table-cell">Tanggal</div>
                             <div class="table-cell">Status</div>
                             <div class="table-cell">Aksi</div>
@@ -92,18 +88,24 @@
                                 <div class="table-cell">
                                     <div class="customer-info">
                                         <div class="customer-avatar">
-                                            {{ $order->user ? substr($order->user->name, 0, 1) : 'U' }}
+                                            {{ substr($order->customer_name, 0, 1) }}
                                         </div>
                                         <div class="customer-details">
-                                            <div class="customer-name">{{ $order->user ? $order->user->name : 'User deleted' }}</div>
-                                            <div class="customer-email">{{ $order->user ? $order->user->email : 'N/A' }}</div>
+                                            <div class="customer-name">{{ $order->customer_name }}</div>
+                                            <div class="customer-email">{{ $order->customer_email }}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="table-cell">
-                                    <div class="event-info">
-                                        <div class="event-name">{{ $order->event_name }}</div>
-                                        <div class="event-meta">{{ $order->room->name ?? 'Room deleted' }}</div>
+                                    <div class="order-info">
+                                        <div class="order-id">{{ $order->order_id }}</div>
+                                        <div class="order-items">{{ $order->total_items }} item(s)</div>
+                                    </div>
+                                </div>
+                                <div class="table-cell">
+                                    <div class="total-info">
+                                        <div class="total-amount">{{ $order->formatted_total }}</div>
+                                        <div class="payment-status">{{ ucfirst($order->payment_status) }}</div>
                                     </div>
                                 </div>
                                 <div class="table-cell">
@@ -118,8 +120,10 @@
                                         @method('PATCH')
                                         <select name="status" class="status-select {{ $order->status }}" onchange="this.form.submit()">
                                             <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                            <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
+                                            <option value="paid" {{ $order->status == 'paid' ? 'selected' : '' }}>Paid</option>
+                                            <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing</option>
+                                            <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                                            <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
                                             <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                                         </select>
                                     </form>
@@ -302,7 +306,7 @@
 
 .table-row {
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr 1fr;
     gap: 1rem;
     padding: 1rem 1.5rem;
     align-items: center;
@@ -369,6 +373,42 @@
     font-size: 0.75rem;
 }
 
+.order-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.order-id {
+    font-weight: 600;
+    color: #1a202c;
+    font-size: 0.875rem;
+    font-family: monospace;
+}
+
+.order-items {
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+.total-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.total-amount {
+    font-weight: 700;
+    color: #059669;
+    font-size: 0.875rem;
+}
+
+.payment-status {
+    color: #64748b;
+    font-size: 0.75rem;
+    text-transform: capitalize;
+}
+
 .order-date {
     font-weight: 600;
     color: #1a202c;
@@ -402,10 +442,28 @@
     border-color: #10b981;
 }
 
-.status-select.completed {
+.status-select.paid {
+    background: #d1fae5;
+    color: #065f46;
+    border-color: #10b981;
+}
+
+.status-select.processing {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #f59e0b;
+}
+
+.status-select.shipped {
     background: #dbeafe;
     color: #1e40af;
     border-color: #3b82f6;
+}
+
+.status-select.delivered {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #22c55e;
 }
 
 .status-select.cancelled {

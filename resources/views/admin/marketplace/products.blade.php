@@ -3,35 +3,32 @@
 @section('title', 'Kelola Produk')
 
 @section('content')
-<div class="products-management">
-    <!-- Header -->
-    <div class="page-header">
-        <div class="header-content">
-            <div class="header-left">
-                <h1 class="page-title">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="title-icon">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    Kelola Produk
-                </h1>
-                <p class="page-subtitle">Kelola semua produk dari UMKM</p>
+<div class="admin-main">
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-page-header">
+            <div class="admin-page-title">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <a href="{{ route('admin.marketplace.index') }}" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f3f4f6; border-radius: 8px; transition: all 0.2s; text-decoration: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #374151;">
+                            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                        </svg>
+                    </a>
+                    <div>
+                        <h1>KELOLA PRODUK</h1>
+                        <p>Kelola semua produk dari UMKM</p>
+                    </div>
+                </div>
             </div>
-            <div class="header-right">
-                <a href="{{ route('admin.marketplace.products.create') }}" class="btn-primary">
+            <div class="admin-page-actions">
+                <a href="{{ route('admin.marketplace.products.create') }}" class="admin-btn-primary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
                     </svg>
                     Tambah Produk
                 </a>
-                <a href="{{ route('admin.marketplace.index') }}" class="btn-secondary">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                    </svg>
-                    Dashboard
-                </a>
             </div>
         </div>
-    </div>
 
     <!-- Filters -->
     <div class="filters-section">

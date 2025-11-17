@@ -81,41 +81,78 @@
             </div>
 
             <div class="pilar-grid">
-                <div class="pilar-item">
+                <div class="pilar-item" data-pilar="1" onclick="openPilarModal(1)">
                     <div class="pilar-image">
                         <img src="{{ asset('images/5 pilar/fungsi1.jpg') }}" alt="Pilar 1 - Rumah BUMN">
                     </div>
                     <div class="pilar-number">01</div>
+                    <div class="pilar-overlay">
+                        <p>Klik untuk info lebih lanjut</p>
+                    </div>
                 </div>
                 
-                <div class="pilar-item">
+                <div class="pilar-item" data-pilar="2" onclick="openPilarModal(2)">
                     <div class="pilar-image">
                         <img src="{{ asset('images/5 pilar/fungsi2.jpg') }}" alt="Pilar 2 - Rumah BUMN">
                     </div>
                     <div class="pilar-number">02</div>
+                    <div class="pilar-overlay">
+                        <p>Klik untuk info lebih lanjut</p>
+                    </div>
                 </div>
                 
-                <div class="pilar-item">
+                <div class="pilar-item" data-pilar="3" onclick="openPilarModal(3)">
                     <div class="pilar-image">
                         <img src="{{ asset('images/5 pilar/fungsi3.jpg') }}" alt="Pilar 3 - Rumah BUMN">
                     </div>
                     <div class="pilar-number">03</div>
+                    <div class="pilar-overlay">
+                        <p>Klik untuk info lebih lanjut</p>
+                    </div>
                 </div>
                 
-                <div class="pilar-item">
+                <div class="pilar-item" data-pilar="4" onclick="openPilarModal(4)">
                     <div class="pilar-image">
                         <img src="{{ asset('images/5 pilar/fungsi4.jpg') }}" alt="Pilar 4 - Rumah BUMN">
                     </div>
                     <div class="pilar-number">04</div>
+                    <div class="pilar-overlay">
+                        <p>Klik untuk info lebih lanjut</p>
+                    </div>
                 </div>
                 
-                <div class="pilar-item">
+                <div class="pilar-item" data-pilar="5" onclick="openPilarModal(5)">
                     <div class="pilar-image">
                         <img src="{{ asset('images/5 pilar/fungsi5.jpg') }}" alt="Pilar 5 - Rumah BUMN">
                     </div>
                     <div class="pilar-number">05</div>
+                    <div class="pilar-overlay">
+                        <p>Klik untuk info lebih lanjut</p>
+                    </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Modal Pilar -->
+    <div id="pilarModal" class="pilar-modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closePilarModal()">&times;</span>
+            <div class="modal-header">
+                <div class="modal-number" id="modalNumber"></div>
+                <h2 id="modalTitle"></h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modalImage" src="" alt="">
+                </div>
+                <div class="modal-description">
+                    <p id="modalDescription"></p>
+                    <ul id="modalFeatures"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
         </div>
     </section>
 
@@ -303,6 +340,125 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.stat-number, .summary-number').forEach(counter => {
         counterObserver.observe(counter);
     });
+    
+    // Data untuk setiap pilar
+    window.pilarData = {
+        1: {
+            title: 'Pengembangan UMKM',
+            image: '{{ asset("images/5 pilar/fungsi1.jpg") }}',
+            description: 'Program pembinaan dan pengembangan UMKM melalui pendampingan bisnis, pelatihan kewirausahaan, dan akses permodalan untuk meningkatkan daya saing dan produktivitas pelaku usaha mikro, kecil, dan menengah.',
+            features: [
+                'Pelatihan dan workshop bisnis rutin',
+                'Pendampingan business plan dan strategi pemasaran',
+                'Akses pembiayaan dan permodalan',
+                'Sertifikasi produk dan legalitas usaha',
+                'Networking dengan mitra bisnis dan investor'
+            ]
+        },
+        2: {
+            title: 'Basecamp Milenial',
+            image: '{{ asset("images/5 pilar/fungsi2.jpg") }}',
+            description: 'Ruang kolaborasi dan inkubasi bagi generasi milenial dan Gen Z untuk mengembangkan ide bisnis, startup digital, dan inovasi teknologi dengan fasilitas lengkap dan mentor berpengalaman.',
+            features: [
+                'Workspace modern dengan teknologi terkini',
+                'Program inkubasi startup dan digital business',
+                'Mentoring dari praktisi industri',
+                'Akses internet berkecepatan tinggi',
+                'Event dan networking session rutin'
+            ]
+        },
+        3: {
+            title: 'Coworking Space',
+            image: '{{ asset("images/5 pilar/fungsi3.jpg") }}',
+            description: 'Penyediaan ruang kerja bersama yang modern dan nyaman dengan fasilitas lengkap untuk freelancer, startup, dan pelaku usaha yang membutuhkan tempat kerja fleksibel dan profesional.',
+            features: [
+                'Meeting room dan private office',
+                'High-speed WiFi dan fasilitas IT',
+                'Area lounge dan pantry',
+                'Event space untuk seminar dan workshop',
+            ]
+        },
+        4: {
+            title: 'Informasi Tanggap Bencana',
+            image: '{{ asset("images/5 pilar/fungsi4.jpg") }}',
+            description: 'Pusat informasi dan koordinasi untuk kesiapsiagaan bencana, memberikan edukasi mitigasi risiko, sistem peringatan dini, dan koordinasi bantuan bagi UMKM yang terdampak bencana.',
+            features: [
+                'Sistem informasi dan peringatan dini bencana',
+                'Pelatihan kesiapsiagaan dan mitigasi bencana',
+                'Koordinasi dengan BPBD dan instansi terkait',
+                'Program bantuan dan pemulihan UMKM terdampak',
+            ]
+        },
+        5: {
+            title: 'Penyaluran PK/BL & KUR',
+            image: '{{ asset("images/5 pilar/fungsi5.jpg") }}',
+            description: 'Program penyaluran Program Kemitraan (PK), Bina Lingkungan (BL), dan Kredit Usaha Rakyat (KUR) untuk memberikan akses permodalan yang mudah dan terjangkau bagi UMKM.',
+            features: [
+                'Kredit Usaha Rakyat (KUR) dengan bunga rendah',
+                'Program Kemitraan BUMN untuk UMKM',
+                'Bina Lingkungan untuk pengembangan masyarakat',
+                'Pendampingan proposal dan administrasi',
+                'Monitoring dan evaluasi penggunaan dana'
+            ]
+        }
+    };
+});
+
+// Fungsi untuk membuka modal pilar
+function openPilarModal(pilarNumber) {
+    const modal = document.getElementById('pilarModal');
+    const data = window.pilarData[pilarNumber];
+    
+    if (data) {
+        document.getElementById('modalNumber').textContent = '0' + pilarNumber;
+        document.getElementById('modalTitle').textContent = data.title;
+        document.getElementById('modalImage').src = data.image;
+        document.getElementById('modalDescription').textContent = data.description;
+        
+        // Populate features list
+        const featuresList = document.getElementById('modalFeatures');
+        featuresList.innerHTML = '';
+        data.features.forEach(feature => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                ${feature}
+            `;
+            featuresList.appendChild(li);
+        });
+        
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// Fungsi untuk menutup modal pilar
+function closePilarModal() {
+    const modal = document.getElementById('pilarModal');
+    modal.classList.add('closing');
+    
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.classList.remove('closing');
+        document.body.style.overflow = 'auto';
+    }, 300); // Match animation duration
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('pilarModal');
+    if (event.target === modal) {
+        closePilarModal();
+    }
+}
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closePilarModal();
+    }
 });
 </script>
 @endpush

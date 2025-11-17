@@ -1,129 +1,149 @@
 @extends('layouts.admin')
 
+@section('title', 'Tambah Ruangan - Admin Rumah BUMN')
+
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <div class="flex items-center mb-6">
-            <a href="{{ route('admin.rooms.index') }}" class="text-gray-600 hover:text-gray-900 mr-4">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-            <h2 class="text-2xl font-bold text-gray-800">Tambah Ruangan Baru</h2>
-        </div>
-
-        @if($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                <ul class="list-disc list-inside">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('admin.rooms.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Ruangan *</label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                           required>
-                </div>
-
-                <div>
-                    <label for="capacity" class="block text-sm font-medium text-gray-700 mb-2">Kapasitas *</label>
-                    <input type="number" name="capacity" id="capacity" value="{{ old('capacity') }}" min="1"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                           required>
-                </div>
-
-                <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
-                    <select name="status" id="status" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                            required>
-                        <option value="available" {{ old('status') === 'available' ? 'selected' : '' }}>Tersedia</option>
-                        <option value="maintenance" {{ old('status') === 'maintenance' ? 'selected' : '' }}>Maintenance</option>
-                        <option value="unavailable" {{ old('status') === 'unavailable' ? 'selected' : '' }}>Tidak Tersedia</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="available_from" class="block text-sm font-medium text-gray-700 mb-2">Waktu Mulai *</label>
-                    <input type="time" name="available_from" id="available_from" value="{{ old('available_from', '08:00') }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                           required>
-                </div>
-
-                <div>
-                    <label for="available_until" class="block text-sm font-medium text-gray-700 mb-2">Waktu Selesai *</label>
-                    <input type="time" name="available_until" id="available_until" value="{{ old('available_until', '17:00') }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                           required>
-                </div>
-
-                <div class="md:col-span-2">
-                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
-                    <input type="text" name="location" id="location" value="{{ old('location') }}"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                           placeholder="Contoh: Lantai 1, Gedung A">
-                </div>
-
-                <div class="md:col-span-2">
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                    <textarea name="description" id="description" rows="4"
-                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                              placeholder="Deskripsi ruangan...">{{ old('description') }}</textarea>
-                </div>
-
-                <div class="md:col-span-2">
-                    <label for="image" class="block text-sm font-medium text-gray-700 mb-2">Gambar Ruangan</label>
-                    <input type="file" name="image" id="image" accept="image/*"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                    <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, GIF. Maksimal 2MB</p>
-                </div>
-
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Fasilitas</label>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        @php
-                        $facilities = [
-                            'wifi' => 'WiFi',
-                            'proyektor' => 'Proyektor',
-                            'ac' => 'AC',
-                            'whiteboard' => 'Whiteboard',
-                            'sound_system' => 'Sound System',
-                            'tv' => 'TV/Monitor',
-                            'flipchart' => 'Flipchart',
-                            'microphone' => 'Microphone',
-                            'printer' => 'Printer'
-                        ];
-                        $oldFacilities = old('facilities', []);
-                        @endphp
-                        
-                        @foreach($facilities as $key => $label)
-                        <div class="flex items-center">
-                            <input type="checkbox" name="facilities[]" value="{{ $key }}" id="facility_{{ $key }}"
-                                   class="mr-2" {{ in_array($key, $oldFacilities) ? 'checked' : '' }}>
-                            <label for="facility_{{ $key }}" class="text-sm text-gray-700">{{ $label }}</label>
+    <div class="admin-main">
+        <div class="admin-container">
+            <div class="admin-page-header">
+                <div class="admin-page-title">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <a href="{{ route('admin.rooms.index') }}" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f3f4f6; border-radius: 8px; transition: all 0.2s; text-decoration: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color: #374151;">
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                            </svg>
+                        </a>
+                        <div>
+                            <h1>TAMBAH RUANGAN</h1>
+                            <p>Tambah ruangan baru untuk booking</p>
                         </div>
-                        @endforeach
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-end space-x-4 mt-8">
-                <a href="{{ route('admin.rooms.index') }}" 
-                   class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition duration-200">
-                    Batal
-                </a>
-                <button type="submit" 
-                        class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
-                    Simpan Ruangan
-                </button>
-            </div>
-        </form>
+            @if($errors->any())
+                <div class="admin-alert admin-alert-error">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    <div>
+                        <strong>Terdapat kesalahan:</strong>
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('admin.rooms.store') }}" enctype="multipart/form-data" class="admin-form-card">
+                @csrf
+                
+                <div class="admin-form-section">
+                    <h3 class="admin-form-section-title">Informasi Dasar</h3>
+                    
+                    <div class="admin-form-group">
+                        <label for="name">Nama Ruangan *</label>
+                        <input type="text" name="name" id="name" class="admin-input" value="{{ old('name') }}" placeholder="Contoh: Ruang Meeting A" required>
+                        @error('name')<span class="admin-error">{{ $message }}</span>@enderror
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label for="description">Deskripsi *</label>
+                        <textarea name="description" id="description" class="admin-textarea" rows="4" placeholder="Deskripsi lengkap ruangan..." required>{{ old('description') }}</textarea>
+                        @error('description')<span class="admin-error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+
+                <div class="admin-form-section">
+                    <h3 class="admin-form-section-title">Detail Ruangan</h3>
+                    
+                    <div class="admin-form-row">
+                        <div class="admin-form-group">
+                            <label for="capacity">Kapasitas (Orang) *</label>
+                            <input type="number" name="capacity" id="capacity" class="admin-input" value="{{ old('capacity') }}" placeholder="10" min="1" required>
+                            @error('capacity')<span class="admin-error">{{ $message }}</span>@enderror
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label for="location">Lokasi</label>
+                            <input type="text" name="location" id="location" class="admin-input" value="{{ old('location') }}" placeholder="Contoh: Lantai 2, Gedung A">
+                            @error('location')<span class="admin-error">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="admin-form-row">
+                        <div class="admin-form-group">
+                            <label for="available_from">Jam Buka *</label>
+                            <input type="time" name="available_from" id="available_from" class="admin-input" value="{{ old('available_from', '08:00') }}" required>
+                            @error('available_from')<span class="admin-error">{{ $message }}</span>@enderror
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label for="available_until">Jam Tutup *</label>
+                            <input type="time" name="available_until" id="available_until" class="admin-input" value="{{ old('available_until', '17:00') }}" required>
+                            @error('available_until')<span class="admin-error">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label for="status">Status *</label>
+                        <select name="status" id="status" class="admin-select" required>
+                            <option value="available" {{ old('status') == 'available' ? 'selected' : '' }}>Tersedia</option>
+                            <option value="maintenance" {{ old('status') == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
+                            <option value="unavailable" {{ old('status') == 'unavailable' ? 'selected' : '' }}>Tidak Tersedia</option>
+                        </select>
+                        @error('status')<span class="admin-error">{{ $message }}</span>@enderror
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Fasilitas</label>
+                        <div class="admin-checkbox-group">
+                            @php
+                            $facilities = [
+                                'wifi' => 'WiFi',
+                                'proyektor' => 'Proyektor',
+                                'ac' => 'AC',
+                                'whiteboard' => 'Whiteboard',
+                                'sound_system' => 'Sound System',
+                                'tv' => 'TV/Monitor',
+                                'flipchart' => 'Flipchart',
+                                'microphone' => 'Microphone',
+                                'printer' => 'Printer'
+                            ];
+                            @endphp
+                            @foreach($facilities as $key => $label)
+                                <label class="admin-checkbox">
+                                    <input type="checkbox" name="facilities[]" value="{{ $key }}" {{ in_array($key, old('facilities', [])) ? 'checked' : '' }}>
+                                    <span>{{ $label }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-form-section">
+                    <h3 class="admin-form-section-title">Gambar Ruangan</h3>
+                    
+                    <div class="admin-form-group">
+                        <label for="image">Upload Gambar</label>
+                        <input type="file" name="image" id="image" class="admin-input-file" accept="image/*">
+                        <small class="admin-form-help">Format: JPG, PNG, GIF. Maksimal 2MB</small>
+                        @error('image')<span class="admin-error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="admin-btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                        Simpan Ruangan
+                    </button>
+                    <a href="{{ route('admin.rooms.index') }}" class="admin-btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 @endsection

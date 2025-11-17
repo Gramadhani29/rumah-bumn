@@ -8,6 +8,7 @@ use App\Models\Product;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
+use App\Models\Order;
 
 class PaymentController extends Controller
 {
@@ -106,13 +107,20 @@ class PaymentController extends Controller
         try {
             $snapToken = Snap::getSnapToken($transactionData);
             
-            // Store order data in session temporarily
-            session()->put('pending_order', [
+            // Create order record in database
+            $order = Order::create([
                 'order_id' => $orderId,
-                'customer' => $customerDetails,
-                'items' => $cartItems,
-                'total' => $totalAmount,
-                'created_at' => now()
+                'customer_name' => $request->first_name . ' ' . $request->last_name,
+                'customer_email' => $request->email,
+                'customer_phone' => $request->phone,
+                'customer_address' => $request->address,
+                'customer_city' => $request->city,
+                'customer_postal_code' => $request->postal_code,
+                'total_amount' => $totalAmount,
+                'status' => 'pending',
+                'payment_status' => 'pending',
+                'payment_method' => 'midtrans',
+                'items' => $cartItems
             ]);
 
             return response()->json([
@@ -133,7 +141,6 @@ class PaymentController extends Controller
     {
         // Clear cart after successful payment
         session()->forget('cart');
-        session()->forget('pending_order');
 
         return view('payment.finish')->with([
             'title' => 'Pembayaran Berhasil',
@@ -201,11 +208,44 @@ class PaymentController extends Controller
 
     private function updateOrderStatus($orderId, $status)
     {
-        // Here you would update your order status in database
-        // For now, we'll just log it
-        \Log::info("Order {$orderId} status updated to: {$status}");
-        
-        // You can implement database storage for orders here
-        // Example: Order::where('order_id', $orderId)->update(['status' => $status]);
+        try {
+            $order = Order::where('order_id', $orderId)->first();
+            
+            if ($order) {
+                $orderStatus = 'pending';
+                $paymentStatus = 'pending';
+                $paidAt = null;
+                
+                switch ($status) {
+                    case 'success':
+                        $orderStatus = 'paid';
+                        $paymentStatus = 'paid';
+                        $paidAt = now();
+                        break;
+                    case 'pending':
+                        $orderStatus = 'pending';
+                        $paymentStatus = 'pending';
+                        break;
+                    case 'denied':
+                    case 'cancelled':
+                    case 'expired':
+                        $orderStatus = 'cancelled';
+                        $paymentStatus = 'failed';
+                        break;
+                }
+                
+                $order->update([
+                    'status' => $orderStatus,
+                    'payment_status' => $paymentStatus,
+                    'paid_at' => $paidAt
+                ]);
+                
+                \Log::info("Order {$orderId} updated - Status: {$orderStatus}, Payment: {$paymentStatus}");
+            } else {
+                \Log::warning("Order {$orderId} not found in database");
+            }
+        } catch (\Exception $e) {
+            \Log::error("Failed to update order {$orderId}: " . $e->getMessage());
+        }
     }
 }
