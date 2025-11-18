@@ -10,7 +10,10 @@ class Umkm extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'name',
+        'business_name',
+        'slug',
         'description',
         'owner_name',
         'phone',
@@ -36,6 +39,12 @@ class Umkm extends Model
         'rating' => 'decimal:1',
         'joined_at' => 'datetime'
     ];
+
+    // Relasi dengan User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     // Relasi dengan Product
     public function products()

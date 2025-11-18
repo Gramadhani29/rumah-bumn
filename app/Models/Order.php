@@ -10,6 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'order_id',
         'customer_name',
         'customer_email',
@@ -36,6 +37,18 @@ class Order extends Model
         'shipped_at' => 'datetime',
         'delivered_at' => 'datetime'
     ];
+
+    // Relasi dengan User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Relasi dengan Order Items
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 
     // Accessor untuk mendapatkan nama customer lengkap
     public function getFullNameAttribute()

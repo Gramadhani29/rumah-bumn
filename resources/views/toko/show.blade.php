@@ -269,9 +269,16 @@ function addToCart(productId) {
     .then(response => {
         console.log('Response status:', response.status);
         if (!response.ok) {
+            if (response.status === 401) {
+                showNotification('Silakan login terlebih dahulu untuk melanjutkan pembelian', 'error');
+                setTimeout(() => {
+                    window.location.href = '{{ route("login") }}';
+                }, 2000);
+                throw new Error('Unauthenticated');
+            }
             return response.text().then(text => {
                 console.error('Error response:', text);
-                throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             });
         }
         return response.json();
@@ -288,7 +295,9 @@ function addToCart(productId) {
     })
     .catch(error => {
         console.error('Full error details:', error);
-        showNotification('Terjadi kesalahan: ' + error.message, 'error');
+        if (error.message !== 'Unauthenticated') {
+            showNotification('Terjadi kesalahan saat menambahkan produk', 'error');
+        }
     });
 }
 

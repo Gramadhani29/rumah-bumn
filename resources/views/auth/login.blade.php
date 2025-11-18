@@ -69,5 +69,15 @@
         <button type="submit" class="auth-btn-primary">
             Masuk
         </button>
+
+        <!-- Register Link -->
+        <div class="auth-form-footer">
+            <p class="auth-form-footer-text">
+                Belum punya akun? 
+                <a href="{{ route('register') }}" class="auth-link-primary">
+                    Daftar sekarang
+                </a>
+            </p>
+        </div>
     </form>
 </x-guest-layout>

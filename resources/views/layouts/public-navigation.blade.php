@@ -39,9 +39,19 @@
                         </svg>
                     </a>
                     <ul class="dropdown-menu" id="userDropdown">
-                        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li><a href="{{ url('/#about') }}">Tentang Saya</a></li>
-                        <li><a href="{{ route('booking.my-bookings') }}">Booking Saya</a></li>
+                        @if(Auth::user()->isAdmin())
+                            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        @elseif(Auth::user()->isEksternal())
+                            <li><a href="{{ route('eksternal.dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ route('eksternal.orders') }}">Pesanan Saya</a></li>
+                            <li><a href="{{ route('profile.edit') }}">Tentang Saya</a></li>
+                        @elseif(Auth::user()->isUmkm())
+                            <li><a href="{{ route('umkm.dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ route('umkm.products') }}">Produk Saya</a></li>
+                            <li><a href="{{ route('profile.edit') }}">Tentang Saya</a></li>
+                        @else
+                            <li><a href="{{ url('/') }}">Beranda</a></li>
+                        @endif
                         <li class="dropdown-divider"></li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}" style="margin: 0;">

@@ -29,22 +29,50 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validationRules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+            'role' => ['required', 'in:umkm,eksternal'],
+        ];
 
-        $user = User::create([
+        // If role is UMKM, business_name is required
+        if ($request->role === 'umkm') {
+            $validationRules['business_name'] = ['required', 'string', 'max:255'];
+        }
+
+        $request->validate($validationRules);
+
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]);
+            'role' => $request->role,
+        ];
+
+        // Add business_name only if role is UMKM
+        if ($request->role === 'umkm') {
+            $userData['business_name'] = $request->business_name;
+        }
+
+        $user = User::create($userData);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect based on role
+        if ($user->isAdmin()) {
+            return redirect(route('dashboard', absolute: false));
+        } elseif ($user->isEksternal()) {
+            return redirect(route('eksternal.dashboard', absolute: false))
+                ->with('success', 'Pendaftaran berhasil! Selamat datang di Rumah BUMN.');
+        } elseif ($user->isUmkm()) {
+            return redirect(route('umkm.dashboard', absolute: false))
+                ->with('success', 'Pendaftaran berhasil! Mulai jual produk Anda sekarang.');
+        }
+
+        // Default redirect to home page
+        return redirect('/')->with('success', 'Pendaftaran berhasil! Selamat datang di Rumah BUMN.');
     }
 }

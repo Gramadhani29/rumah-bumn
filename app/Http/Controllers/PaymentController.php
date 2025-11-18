@@ -107,8 +107,9 @@ class PaymentController extends Controller
         try {
             $snapToken = Snap::getSnapToken($transactionData);
             
-            // Create order record in database
+            // Create order record in database with user_id
             $order = Order::create([
+                'user_id' => auth()->id(), // Simpan user_id agar muncul di riwayat
                 'order_id' => $orderId,
                 'customer_name' => $request->first_name . ' ' . $request->last_name,
                 'customer_email' => $request->email,
@@ -122,6 +123,18 @@ class PaymentController extends Controller
                 'payment_method' => 'midtrans',
                 'items' => $cartItems
             ]);
+            
+            // Create OrderItem records untuk relasi yang benar
+            foreach ($cartItems as $item) {
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['id'],
+                    'product_name' => $item['name'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['price'] * $item['quantity']
+                ]);
+            }
 
             return response()->json([
                 'success' => true,
@@ -144,8 +157,29 @@ class PaymentController extends Controller
 
         return view('payment.finish')->with([
             'title' => 'Pembayaran Berhasil',
-            'message' => 'Terima kasih! Pembayaran Anda telah berhasil diproses.'
+            'message' => 'Terima kasih! Pembayaran Anda telah berhasil diproses.',
+            'order_id' => $request->order_id
         ]);
+    }
+    
+    /**
+     * Manual update status untuk testing di localhost
+     * HAPUS METHOD INI DI PRODUCTION!
+     */
+    public function manualSuccess($orderId)
+    {
+        $order = Order::where('order_id', $orderId)->first();
+        
+        if (!$order) {
+            return redirect()->route('eksternal.dashboard')
+                ->with('error', 'Order tidak ditemukan');
+        }
+        
+        // Simulasi notification success dari Midtrans
+        $this->updateOrderStatus($orderId, 'success', 'credit_card');
+        
+        return redirect()->route('eksternal.orders')
+            ->with('success', 'Status pembayaran berhasil diupdate menjadi Success!');
     }
 
     public function paymentUnfinish(Request $request)
@@ -172,41 +206,50 @@ class PaymentController extends Controller
             $transactionStatus = $notification->transaction_status;
             $fraudStatus = $notification->fraud_status;
             $orderId = $notification->order_id;
+            $paymentType = $notification->payment_type ?? null;
+            
+            \Log::info('Midtrans Notification Received', [
+                'order_id' => $orderId,
+                'transaction_status' => $transactionStatus,
+                'fraud_status' => $fraudStatus,
+                'payment_type' => $paymentType
+            ]);
 
             // Handle different payment status
             if ($transactionStatus == 'capture') {
                 if ($fraudStatus == 'challenge') {
                     // Handle challenge transaction
-                    $this->updateOrderStatus($orderId, 'challenge');
+                    $this->updateOrderStatus($orderId, 'challenge', $paymentType);
                 } else if ($fraudStatus == 'accept') {
                     // Handle successful transaction
-                    $this->updateOrderStatus($orderId, 'success');
+                    $this->updateOrderStatus($orderId, 'success', $paymentType);
                 }
             } else if ($transactionStatus == 'settlement') {
                 // Handle successful transaction
-                $this->updateOrderStatus($orderId, 'success');
+                $this->updateOrderStatus($orderId, 'success', $paymentType);
             } else if ($transactionStatus == 'pending') {
                 // Handle pending transaction
-                $this->updateOrderStatus($orderId, 'pending');
+                $this->updateOrderStatus($orderId, 'pending', $paymentType);
             } else if ($transactionStatus == 'deny') {
                 // Handle denied transaction
-                $this->updateOrderStatus($orderId, 'denied');
+                $this->updateOrderStatus($orderId, 'denied', $paymentType);
             } else if ($transactionStatus == 'expire') {
                 // Handle expired transaction
-                $this->updateOrderStatus($orderId, 'expired');
+                $this->updateOrderStatus($orderId, 'expired', $paymentType);
             } else if ($transactionStatus == 'cancel') {
                 // Handle cancelled transaction
-                $this->updateOrderStatus($orderId, 'cancelled');
+                $this->updateOrderStatus($orderId, 'cancelled', $paymentType);
             }
 
             return response()->json(['status' => 'ok']);
             
         } catch (\Exception $e) {
+            \Log::error('Midtrans Notification Error: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
 
-    private function updateOrderStatus($orderId, $status)
+    private function updateOrderStatus($orderId, $status, $paymentType = null)
     {
         try {
             $order = Order::where('order_id', $orderId)->first();
@@ -218,7 +261,7 @@ class PaymentController extends Controller
                 
                 switch ($status) {
                     case 'success':
-                        $orderStatus = 'paid';
+                        $orderStatus = 'processing'; // Status order berubah ke processing setelah dibayar
                         $paymentStatus = 'paid';
                         $paidAt = now();
                         break;
@@ -232,15 +275,31 @@ class PaymentController extends Controller
                         $orderStatus = 'cancelled';
                         $paymentStatus = 'failed';
                         break;
+                    case 'challenge':
+                        $orderStatus = 'pending';
+                        $paymentStatus = 'challenge';
+                        break;
                 }
                 
-                $order->update([
+                $updateData = [
                     'status' => $orderStatus,
                     'payment_status' => $paymentStatus,
                     'paid_at' => $paidAt
-                ]);
+                ];
                 
-                \Log::info("Order {$orderId} updated - Status: {$orderStatus}, Payment: {$paymentStatus}");
+                // Tambahkan midtrans_transaction_id jika ada
+                if ($paymentType) {
+                    $updateData['payment_method'] = $paymentType;
+                }
+                
+                $order->update($updateData);
+                
+                \Log::info("Order {$orderId} updated successfully", [
+                    'status' => $orderStatus,
+                    'payment_status' => $paymentStatus,
+                    'payment_type' => $paymentType,
+                    'user_id' => $order->user_id
+                ]);
             } else {
                 \Log::warning("Order {$orderId} not found in database");
             }

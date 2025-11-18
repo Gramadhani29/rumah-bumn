@@ -83,17 +83,17 @@ Route::get('/berita/{slug}', function ($slug) {
     return view('berita-detail', compact('news', 'relatedNews'));
 })->name('berita.detail');
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'role:admin'])->name('dashboard');
 
 Route::get('/admin', function () {
     return redirect()->route('dashboard');
-})->middleware(['auth', 'verified'])->name('admin');
+})->middleware(['auth', 'verified', 'role:admin'])->name('admin');
 
 // API Routes for booking data
 Route::get('/api/rooms/{room}/bookings', [BookingController::class, 'getBookingsByDate']);
 
 // Admin Routes (protected by auth middleware)
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('news', NewsController::class);
     Route::post('news/{news}/toggle-status', [NewsController::class, 'toggleStatus'])->name('news.toggle-status');
     Route::post('news/{news}/toggle-featured', [NewsController::class, 'toggleFeatured'])->name('news.toggle-featured');
@@ -172,23 +172,57 @@ Route::middleware('auth')->group(function () {
 
 // Routes untuk Toko
 Route::prefix('toko')->name('toko.')->group(function () {
+    // Public routes - bisa diakses tanpa login
     Route::get('/', [\App\Http\Controllers\TokoController::class, 'index'])->name('index');
     Route::get('/produk/{id}', [\App\Http\Controllers\TokoController::class, 'show'])->name('produk.show');
-    Route::get('/keranjang', [\App\Http\Controllers\TokoController::class, 'cart'])->name('cart');
-    Route::post('/keranjang/tambah', [\App\Http\Controllers\TokoController::class, 'addToCart'])->name('cart.add');
-    Route::post('/keranjang/update', [\App\Http\Controllers\TokoController::class, 'updateCartQuantity'])->name('cart.update');
-    Route::delete('/keranjang/{id}', [\App\Http\Controllers\TokoController::class, 'removeFromCart'])->name('cart.remove');
-    Route::post('/keranjang/clear', [\App\Http\Controllers\TokoController::class, 'clearCart'])->name('cart.clear');
-    Route::get('/checkout', [\App\Http\Controllers\TokoController::class, 'checkout'])->name('checkout');
+    
+    // Protected routes - harus login (untuk eksternal dan umkm)
+    Route::middleware(['auth', 'role:eksternal,umkm'])->group(function () {
+        Route::get('/keranjang', [\App\Http\Controllers\TokoController::class, 'cart'])->name('cart');
+        Route::post('/keranjang/tambah', [\App\Http\Controllers\TokoController::class, 'addToCart'])->name('cart.add');
+        Route::post('/keranjang/update', [\App\Http\Controllers\TokoController::class, 'updateCartQuantity'])->name('cart.update');
+        Route::delete('/keranjang/{id}', [\App\Http\Controllers\TokoController::class, 'removeFromCart'])->name('cart.remove');
+        Route::post('/keranjang/clear', [\App\Http\Controllers\TokoController::class, 'clearCart'])->name('cart.clear');
+        Route::get('/checkout', [\App\Http\Controllers\TokoController::class, 'checkout'])->name('checkout');
+    });
 });
 
-// Payment Routes
+// Payment Routes - harus login kecuali notification (untuk Midtrans callback)
 Route::prefix('payment')->name('payment.')->group(function () {
-    Route::post('/create-transaction', [\App\Http\Controllers\PaymentController::class, 'createTransaction'])->name('create');
-    Route::get('/finish', [\App\Http\Controllers\PaymentController::class, 'paymentFinish'])->name('finish');
-    Route::get('/unfinish', [\App\Http\Controllers\PaymentController::class, 'paymentUnfinish'])->name('unfinish');
-    Route::get('/error', [\App\Http\Controllers\PaymentController::class, 'paymentError'])->name('error');
+    // Routes yang butuh auth
+    Route::middleware(['auth', 'role:eksternal,umkm'])->group(function () {
+        Route::post('/create-transaction', [\App\Http\Controllers\PaymentController::class, 'createTransaction'])->name('create');
+        Route::get('/finish', [\App\Http\Controllers\PaymentController::class, 'paymentFinish'])->name('finish');
+        Route::get('/unfinish', [\App\Http\Controllers\PaymentController::class, 'paymentUnfinish'])->name('unfinish');
+        Route::get('/error', [\App\Http\Controllers\PaymentController::class, 'paymentError'])->name('error');
+    });
+    
+    // Notification route tanpa auth (untuk Midtrans server callback)
     Route::post('/notification', [\App\Http\Controllers\PaymentController::class, 'handleNotification'])->name('notification');
+    
+    // Manual update untuk testing di localhost (hapus di production!)
+    Route::get('/manual-success/{orderId}', [\App\Http\Controllers\PaymentController::class, 'manualSuccess'])->name('manual.success');
+});
+
+// Eksternal Dashboard Routes
+Route::middleware(['auth', 'role:eksternal'])->prefix('eksternal')->name('eksternal.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\EksternalDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/pesanan', [\App\Http\Controllers\EksternalDashboardController::class, 'orders'])->name('orders');
+    Route::get('/pesanan/{id}', [\App\Http\Controllers\EksternalDashboardController::class, 'orderDetail'])->name('order.detail');
+});
+
+// UMKM Dashboard Routes
+Route::middleware(['auth', 'role:umkm'])->prefix('umkm')->name('umkm.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\UmkmDashboardController::class, 'index'])->name('dashboard');
+    
+    // Products Management
+    Route::get('/produk', [\App\Http\Controllers\UmkmDashboardController::class, 'products'])->name('products');
+    Route::get('/produk/tambah', [\App\Http\Controllers\UmkmDashboardController::class, 'createProduct'])->name('products.create');
+    Route::post('/produk', [\App\Http\Controllers\UmkmDashboardController::class, 'storeProduct'])->name('products.store');
+    Route::get('/produk/{id}/edit', [\App\Http\Controllers\UmkmDashboardController::class, 'editProduct'])->name('products.edit');
+    Route::put('/produk/{id}', [\App\Http\Controllers\UmkmDashboardController::class, 'updateProduct'])->name('products.update');
+    Route::delete('/produk/{id}', [\App\Http\Controllers\UmkmDashboardController::class, 'destroyProduct'])->name('products.destroy');
+    Route::patch('/produk/{id}/toggle', [\App\Http\Controllers\UmkmDashboardController::class, 'toggleProductStatus'])->name('products.toggle');
 });
 
 require __DIR__.'/auth.php';
