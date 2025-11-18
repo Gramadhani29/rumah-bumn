@@ -200,51 +200,69 @@ class PaymentController extends Controller
 
     public function handleNotification(Request $request)
     {
+        // Log raw request untuk debugging
+        \Log::info('Midtrans Notification Raw Request', [
+            'method' => $request->method(),
+            'all_data' => $request->all(),
+            'headers' => $request->headers->all()
+        ]);
+        
         try {
+            // Try using Midtrans Notification class
             $notification = new Notification();
             
             $transactionStatus = $notification->transaction_status;
-            $fraudStatus = $notification->fraud_status;
+            $fraudStatus = $notification->fraud_status ?? null;
             $orderId = $notification->order_id;
             $paymentType = $notification->payment_type ?? null;
             
+        } catch (\Exception $e) {
+            // Fallback: Parse request manually if Notification class fails
+            \Log::warning('Midtrans Notification class failed, using manual parsing', [
+                'error' => $e->getMessage()
+            ]);
+            
+            $transactionStatus = $request->transaction_status;
+            $fraudStatus = $request->fraud_status ?? null;
+            $orderId = $request->order_id;
+            $paymentType = $request->payment_type ?? null;
+        }
+        
+        try {
             \Log::info('Midtrans Notification Received', [
                 'order_id' => $orderId,
                 'transaction_status' => $transactionStatus,
                 'fraud_status' => $fraudStatus,
-                'payment_type' => $paymentType
+                'payment_type' => $paymentType,
+                'gross_amount' => $request->gross_amount ?? null
             ]);
 
             // Handle different payment status
             if ($transactionStatus == 'capture') {
                 if ($fraudStatus == 'challenge') {
-                    // Handle challenge transaction
                     $this->updateOrderStatus($orderId, 'challenge', $paymentType);
                 } else if ($fraudStatus == 'accept') {
-                    // Handle successful transaction
                     $this->updateOrderStatus($orderId, 'success', $paymentType);
                 }
             } else if ($transactionStatus == 'settlement') {
-                // Handle successful transaction
                 $this->updateOrderStatus($orderId, 'success', $paymentType);
             } else if ($transactionStatus == 'pending') {
-                // Handle pending transaction
                 $this->updateOrderStatus($orderId, 'pending', $paymentType);
             } else if ($transactionStatus == 'deny') {
-                // Handle denied transaction
                 $this->updateOrderStatus($orderId, 'denied', $paymentType);
             } else if ($transactionStatus == 'expire') {
-                // Handle expired transaction
                 $this->updateOrderStatus($orderId, 'expired', $paymentType);
             } else if ($transactionStatus == 'cancel') {
-                // Handle cancelled transaction
                 $this->updateOrderStatus($orderId, 'cancelled', $paymentType);
             }
 
             return response()->json(['status' => 'ok']);
             
         } catch (\Exception $e) {
-            \Log::error('Midtrans Notification Error: ' . $e->getMessage());
+            \Log::error('Midtrans Notification Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
