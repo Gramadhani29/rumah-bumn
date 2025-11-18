@@ -28,7 +28,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center space-x-4">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-800">Order #{{ $order->order_number }}</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Order #{{ $order->order_id }}</h3>
                             <p class="text-sm text-gray-500">{{ $order->created_at->format('d F Y, H:i') }}</p>
                         </div>
                     </div>

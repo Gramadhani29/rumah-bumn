@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold text-gray-800">Detail Pesanan</h1>
-                <p class="text-gray-600 mt-2">Order #{{ $order->order_number }}</p>
+                <p class="text-gray-600 mt-2">Order #{{ $order->order_id }}</p>
             </div>
             <a href="{{ route('eksternal.orders') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,10 +75,17 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Produk yang Dipesan</h2>
                 <div class="space-y-4">
-                    @foreach($order->items as $item)
+                    @php
+                        // Gunakan relasi items() jika ada OrderItem, atau convert items array ke collection
+                        $orderItems = $order->relationLoaded('items') && $order->items instanceof \Illuminate\Database\Eloquent\Collection 
+                            ? $order->items 
+                            : collect(is_array($order->items) ? $order->items : []);
+                    @endphp
+                    
+                    @foreach($orderItems as $item)
                     <div class="flex items-center space-x-4 pb-4 border-b border-gray-200 last:border-b-0">
                         <div class="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
-                            @if($item->product->image)
+                            @if(is_object($item) && isset($item->product) && $item->product->image)
                                 <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center">
@@ -89,12 +96,25 @@
                             @endif
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800">{{ $item->product->name }}</h3>
-                            <p class="text-sm text-gray-500">{{ $item->product->umkm->business_name ?? 'UMKM' }}</p>
-                            <p class="text-sm text-gray-600 mt-1">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                            @if(is_object($item) && isset($item->product))
+                                <h3 class="font-semibold text-gray-800">{{ $item->product->name }}</h3>
+                                <p class="text-sm text-gray-500">{{ $item->product->umkm->business_name ?? 'UMKM' }}</p>
+                                <p class="text-sm text-gray-600 mt-1">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                            @elseif(is_array($item))
+                                <h3 class="font-semibold text-gray-800">{{ $item['name'] ?? 'Produk' }}</h3>
+                                <p class="text-sm text-gray-500">{{ $item['merchant_name'] ?? 'UMKM' }}</p>
+                                <p class="text-sm text-gray-600 mt-1">{{ $item['quantity'] ?? 1 }} x Rp {{ number_format($item['price'] ?? 0, 0, ',', '.') }}</p>
+                            @else
+                                <h3 class="font-semibold text-gray-800">{{ $item->product_name ?? 'Produk' }}</h3>
+                                <p class="text-sm text-gray-600 mt-1">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                            @endif
                         </div>
                         <div class="text-right">
-                            <p class="font-semibold text-gray-800">Rp {{ number_format($item->subtotal, 0, ',', '.') }}</p>
+                            @if(is_object($item))
+                                <p class="font-semibold text-gray-800">Rp {{ number_format($item->subtotal ?? ($item->price * $item->quantity), 0, ',', '.') }}</p>
+                            @elseif(is_array($item))
+                                <p class="font-semibold text-gray-800">Rp {{ number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 1), 0, ',', '.') }}</p>
+                            @endif
                         </div>
                     </div>
                     @endforeach
@@ -110,7 +130,7 @@
                 <div class="space-y-3 mb-4">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Order ID</span>
-                        <span class="font-medium text-gray-800">#{{ $order->order_number }}</span>
+                        <span class="font-medium text-gray-800">{{ $order->order_id }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Tanggal Order</span>
@@ -118,7 +138,13 @@
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Total Item</span>
-                        <span class="font-medium text-gray-800">{{ $order->items->sum('quantity') }} produk</span>
+                        <span class="font-medium text-gray-800">
+                            @if($orderItems instanceof \Illuminate\Support\Collection)
+                                {{ $orderItems->sum('quantity') }} produk
+                            @else
+                                {{ count($orderItems) }} produk
+                            @endif
+                        </span>
                     </div>
                 </div>
 

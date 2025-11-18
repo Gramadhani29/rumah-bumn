@@ -77,11 +77,15 @@ class TokoController extends Controller
 
             foreach ($products as $product) {
                 $quantity = $cart[$product->id];
-                $subtotal = $product->price * $quantity;
+                
+                // Gunakan harga diskon jika sedang ada diskon aktif
+                $finalPrice = $product->is_discount_active ? $product->discounted_price : $product->price;
+                $subtotal = $finalPrice * $quantity;
                 
                 $cartItems[] = [
                     'product' => $product,
                     'quantity' => $quantity,
+                    'price' => $finalPrice,
                     'subtotal' => $subtotal
                 ];
                 
